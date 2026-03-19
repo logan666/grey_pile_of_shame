@@ -213,6 +213,26 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
               ),
               const SizedBox(height: 16),
 
+              // Rol de batalla obligatorio, con "Seleccione..." por defecto
+              DropdownButtonFormField<int>(
+                value: selectedRoleId,
+                decoration: const InputDecoration(labelText: 'Rol de batalla'),
+                hint: const Text(
+                  'Seleccione un rol...',
+                ), // Esto aparece si no hay valor
+                items: roles
+                    .map(
+                      (r) => DropdownMenuItem(
+                        value: r['id'] as int,
+                        child: Text(r['name']),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (v) => setState(() => selectedRoleId = v),
+                validator: (v) => v == null ? 'Es obligatorio' : null,
+              ),
+              const SizedBox(height: 16),
+
               // Número de Miniaturas obligatorio y entero
               Row(
                 children: [
@@ -303,26 +323,6 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(height: 16),
-
-              // Rol de batalla obligatorio, con "Seleccione..." por defecto
-              DropdownButtonFormField<int>(
-                value: selectedRoleId,
-                decoration: const InputDecoration(labelText: 'Rol de batalla'),
-                hint: const Text(
-                  'Seleccione un rol...',
-                ), // Esto aparece si no hay valor
-                items: roles
-                    .map(
-                      (r) => DropdownMenuItem(
-                        value: r['id'] as int,
-                        child: Text(r['name']),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (v) => setState(() => selectedRoleId = v),
-                validator: (v) => v == null ? 'Es obligatorio' : null,
               ),
               const SizedBox(height: 16),
 

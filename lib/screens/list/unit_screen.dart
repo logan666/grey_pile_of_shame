@@ -124,33 +124,35 @@ class _UnitScreenState extends State<UnitScreen> {
                 final roleName = entry.key;
                 final roleUnits = entry.value;
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Encabezado del rol con icono
-                    ListTile(
-                      leading: const Icon(Icons.shield, color: Colors.blue),
-                      title: Text(
-                        roleName,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
+                return Container(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    //color: Colors.grey[200], // fondo ligero
+                    borderRadius: BorderRadius.circular(
+                      6,
+                    ), // bordes redondeados opcionales
+                    //border: Border.all(color: Colors.grey), // borde fino
+                  ),
+                  child: ExpansionTile(
+                    leading: const Icon(Icons.shield, color: Colors.black),
+                    title: Text(
+                      roleName,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
                       ),
                     ),
-
-                    // Unidades de ese rol
-                    ...roleUnits.map(
-                      (unit) => Padding(
-                        padding: const EdgeInsets.only(left: 40),
-                        child: ListTile(
-                          leading: const Icon(Icons.person),
-                          title: Text(unit.name),
-                          onTap: () => _openUnitEditor(unit: unit),
-                        ),
-                      ),
-                    ),
-                  ],
+                    children: roleUnits.map((unit) {
+                      return ListTile(
+                        leading: const Icon(Icons.person),
+                        title: Text(unit.name),
+                        onTap: () => _openUnitEditor(unit: unit),
+                      );
+                    }).toList(),
+                  ),
                 );
               }).toList(),
             ),
