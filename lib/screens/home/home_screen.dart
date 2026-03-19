@@ -137,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // Botón crear Ejército
           if (isFabOpen)
             Positioned(
-              bottom: 80,
+              bottom: 100,
               right: 16,
               width: 160,
               child: FloatingActionButton.extended(
@@ -157,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // Botón crear Juego
           if (isFabOpen)
             Positioned(
-              bottom: 140,
+              bottom: 180,
               right: 16,
               width: 160,
               child: FloatingActionButton.extended(
