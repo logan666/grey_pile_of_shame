@@ -85,13 +85,41 @@ class ParametricDao {
     final statusEmpty = await isTableEmpty('painting_status');
 
     if (statusEmpty) {
-      await db.insert('painting_status', {'name': 'Sin montar', 'orden': 0});
-      await db.insert('painting_status', {'name': 'Montado', 'orden': 1});
-      await db.insert('painting_status', {'name': 'Imprimado', 'orden': 2});
-      await db.insert('painting_status', {'name': 'Base', 'orden': 3});
-      await db.insert('painting_status', {'name': 'Detalles', 'orden': 4});
-      await db.insert('painting_status', {'name': 'Table Top', 'orden': 5});
-      await db.insert('painting_status', {'name': 'Terminado', 'orden': 6});
+      await db.insert('painting_status', {
+        'name': 'Sin montar',
+        'orden': 1,
+        'color': '#9E9E9E',
+      });
+      await db.insert('painting_status', {
+        'name': 'Montado',
+        'orden': 2,
+        'color': '#2196F3',
+      });
+      await db.insert('painting_status', {
+        'name': 'Imprimado',
+        'orden': 3,
+        'color': '#FF9800',
+      });
+      await db.insert('painting_status', {
+        'name': 'Base',
+        'orden': 4,
+        'color': '#9C27B0',
+      });
+      await db.insert('painting_status', {
+        'name': 'Detalles',
+        'orden': 5,
+        'color': '#FFC107',
+      });
+      await db.insert('painting_status', {
+        'name': 'Table Top',
+        'orden': 6,
+        'color': '#9E9E9E',
+      });
+      await db.insert('painting_status', {
+        'name': 'Terminado',
+        'orden': 7,
+        'color': '#4CAF50',
+      });
     }
   }
 }

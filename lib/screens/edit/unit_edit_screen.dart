@@ -405,7 +405,7 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
             child: FloatingActionButton(
               onPressed: _saveUnit,
               backgroundColor: Colors.green, // color que uses normalmente
-              child: const Icon(Icons.save),
+              child: const Icon(color: Colors.white, Icons.save),
             ),
           ),
 
@@ -417,7 +417,7 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
               child: FloatingActionButton(
                 backgroundColor: Colors.red,
                 onPressed: _deleteUnit,
-                child: const Icon(Icons.delete),
+                child: const Icon(color: Colors.white, Icons.delete),
               ),
             ),
         ],

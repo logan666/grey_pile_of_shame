@@ -5,6 +5,7 @@ import 'package:grey_pile_of_shame/database/repository/unit_repository.dart';
 import 'package:grey_pile_of_shame/models/unit.dart';
 import 'package:grey_pile_of_shame/models/army.dart';
 import 'package:grey_pile_of_shame/screens/edit/unit_edit_screen.dart';
+import 'package:grey_pile_of_shame/screens/list/miniature_screen.dart';
 
 class UnitScreen extends StatefulWidget {
   final Army army;
@@ -41,6 +42,15 @@ class _UnitScreenState extends State<UnitScreen> {
     setState(() {
       units = data;
     });
+  }
+
+  Future<void> _openMiniaturesScreen(Unit unit) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => MiniatureScreen(unit: unit)),
+    );
+
+    await loadUnits();
   }
 
   Future<void> _openUnitEditor({Unit? unit}) async {
@@ -155,8 +165,14 @@ class _UnitScreenState extends State<UnitScreen> {
                     children: roleUnits.map((unit) {
                       return ListTile(
                         leading: const Icon(Icons.person),
-                        title: Text(unit.name),
-                        onTap: () => _openUnitEditor(unit: unit),
+                        title: GestureDetector(
+                          child: Text(unit.name),
+                          onTap: () => _openMiniaturesScreen(unit),
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () => _openUnitEditor(unit: unit),
+                        ),
                       );
                     }).toList(),
                   ),

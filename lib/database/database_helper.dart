@@ -18,7 +18,7 @@ class DatabaseHelper {
     final path = join(await getDatabasesPath(), 'grey_pile_of_shame.db');
     return await openDatabase(
       path,
-      version: 3,
+      version: 5,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -70,7 +70,19 @@ class DatabaseHelper {
       CREATE TABLE painting_status (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT NOT NULL,
-          orden INTEGER NOT NULL
+          orden INTEGER NOT NULL,
+          color TEXT NOT NULL
+          
+      );
+    ''');
+
+    await db.execute('''
+      CREATE TABLE miniatures (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        unit_id INTEGER NOT NULL,
+        description TEXT,
+        painting_status INTEGER NOT NULL DEFAULT 0,
+        FOREIGN KEY (unit_id) REFERENCES units(id) ON DELETE CASCADE
       );
     ''');
   }
@@ -100,6 +112,22 @@ class DatabaseHelper {
       } catch (e) {
         print('orden ya existe');
       }
+    }
+
+    if (oldVersion < 4) {
+      await db.execute('''
+        CREATE TABLE miniatures (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          unit_id INTEGER NOT NULL,
+          description TEXT,
+          painting_status INTEGER NOT NULL DEFAULT 0,
+          FOREIGN KEY (unit_id) REFERENCES units(id) ON DELETE CASCADE
+        );
+      ''');
+    }
+
+    if (oldVersion < 5) {
+      await db.execute('ALTER TABLE painting_status ADD COLUMN color TEXT;');
     }
   }
 }
