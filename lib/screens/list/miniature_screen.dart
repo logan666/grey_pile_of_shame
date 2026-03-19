@@ -257,7 +257,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
                 children: [
                   // Botón cuadrado con imagen
                   Container(
-                    height: 120,
+                    height: 90,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       image: const DecorationImage(
@@ -298,6 +298,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
                           mini.description,
                           style: const TextStyle(
                             color: Colors.black,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                             shadows: [
                               Shadow(blurRadius: 2, color: Colors.black),
@@ -308,7 +309,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
                           statusName,
                           style: const TextStyle(
                             color: Colors.black,
-                            fontSize: 12,
+                            fontSize: 16,
                             shadows: [
                               Shadow(blurRadius: 2, color: Colors.black),
                             ],
