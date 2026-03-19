@@ -3,6 +3,9 @@ import 'package:grey_pile_of_shame/database/repository/army_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/game_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/unit_repository.dart';
 import 'package:grey_pile_of_shame/models/game.dart';
+import 'package:grey_pile_of_shame/screens/edit/army_edit_screen.dart'
+    show ArmyEditScreen;
+import 'package:grey_pile_of_shame/screens/edit/game_edit_screen.dart';
 import 'package:grey_pile_of_shame/screens/list/unit_screen.dart';
 import '../../models/army.dart';
 import '../edit/edit_selection_screen.dart';
@@ -20,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final unitRepository = UnitRepository();
   List<Game> games = [];
   Map<int, List<Army>> armiesByGame = {};
+  bool isFabOpen = false;
 
   @override
   void initState() {
@@ -129,14 +133,61 @@ class _HomeScreenState extends State<HomeScreen> {
               }).toList(),
             ),
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const EditSelectionScreen()),
-          ).then((_) => loadData());
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: Stack(
+        children: [
+          // Botón crear Ejército
+          if (isFabOpen)
+            Positioned(
+              bottom: 80,
+              right: 16,
+              width: 160,
+              child: FloatingActionButton.extended(
+                heroTag: 'army',
+                onPressed: () {
+                  setState(() => isFabOpen = false);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ArmyEditScreen()),
+                  ).then((_) => loadData());
+                },
+                icon: const Icon(Icons.shield),
+                label: const Text('Ejército'),
+              ),
+            ),
+
+          // Botón crear Juego
+          if (isFabOpen)
+            Positioned(
+              bottom: 140,
+              right: 16,
+              width: 160,
+              child: FloatingActionButton.extended(
+                heroTag: 'game',
+                onPressed: () {
+                  setState(() => isFabOpen = false);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const GameEditScreen()),
+                  ).then((_) => loadData());
+                },
+                icon: const Icon(Icons.videogame_asset),
+                label: const Text('Juego'),
+              ),
+            ),
+
+          // Botón principal
+          Positioned(
+            bottom: 16,
+            right: 16,
+            child: FloatingActionButton(
+              heroTag: 'main',
+              onPressed: () {
+                setState(() => isFabOpen = !isFabOpen);
+              },
+              child: Icon(isFabOpen ? Icons.close : Icons.add),
+            ),
+          ),
+        ],
       ),
     );
   }
