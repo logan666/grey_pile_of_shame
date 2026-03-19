@@ -18,7 +18,7 @@ class DatabaseHelper {
     final path = join(await getDatabasesPath(), 'grey_pile_of_shame.db');
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -60,14 +60,16 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE roles (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL
+          name TEXT NOT NULL,
+          orden INTEGER NOT NULL
       );
     ''');
 
     await db.execute('''
       CREATE TABLE painting_status (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL
+          name TEXT NOT NULL,
+          orden INTEGER NOT NULL
       );
     ''');
   }
@@ -80,6 +82,20 @@ class DatabaseHelper {
         );
       } catch (e) {
         print('miniatures ya existe');
+      }
+    }
+
+    if (oldVersion < 3) {
+      try {
+        await db.execute(
+          'ALTER TABLE roles ADD COLUMN orden INTEGER DEFAULT 0;',
+        );
+
+        await db.execute(
+          'ALTER TABLE painting_status ADD COLUMN orden INTEGER DEFAULT 0',
+        );
+      } catch (e) {
+        print('orden ya existe');
       }
     }
   }

@@ -187,6 +187,19 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
           key: _formKey,
           child: ListView(
             children: [
+              // Ejército (ya obligatorio si quieres, pero lo dejamos opcional)
+              DropdownButtonFormField<Army>(
+                value: selectedArmy,
+                decoration: const InputDecoration(labelText: 'Ejército'),
+                items: armies
+                    .map((a) => DropdownMenuItem(value: a, child: Text(a.name)))
+                    .toList(),
+                onChanged: (value) => setState(() => selectedArmy = value),
+                validator: (v) =>
+                    v == null ? 'Debe seleccionar un ejército' : null,
+              ),
+              const SizedBox(height: 16),
+
               // Nombre obligatorio
               TextFormField(
                 controller: _nameController,
@@ -201,34 +214,95 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
               const SizedBox(height: 16),
 
               // Número de Miniaturas obligatorio y entero
-              TextFormField(
-                controller: _miniaturesController,
-                keyboardType: TextInputType.number,
+              Row(
+                children: [
+                  const Text('Número de Miniaturas:'),
+                  const SizedBox(width: 16),
+                  IconButton(
+                    icon: const Icon(Icons.remove),
+                    onPressed: () {
+                      int current =
+                          int.tryParse(_miniaturesController.text) ?? 1;
+                      if (current > 1) {
+                        current--;
+                        setState(
+                          () => _miniaturesController.text = current.toString(),
+                        );
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    width: 50,
+                    child: TextFormField(
+                      controller: _miniaturesController
+                        ..text = _miniaturesController.text.isEmpty
+                            ? '1'
+                            : _miniaturesController.text,
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      validator: (v) {
+                        if (v == null || v.trim().isEmpty) {
+                          return 'Número de miniaturas obligatorio';
+                        }
+                        if (int.tryParse(v) == null)
+                          return 'Debe ser un número entero';
+                        return null;
+                      },
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () {
+                      int current =
+                          int.tryParse(_miniaturesController.text) ?? 1;
+                      current++;
+                      setState(
+                        () => _miniaturesController.text = current.toString(),
+                      );
+                    },
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 16),
+
+              // Estado de pintado (opcional, por defecto carga el primero)
+              DropdownButtonFormField<int>(
+                value: selectedPaintingStatusId,
                 decoration: const InputDecoration(
-                  labelText: 'Número de Miniaturas',
+                  labelText: 'Estado de pintado',
                 ),
-                validator: (v) {
-                  if (v == null || v.trim().isEmpty) {
-                    return 'Es obligatorio';
-                  }
-                  if (int.tryParse(v) == null) {
-                    return 'Debe de ser un número entero';
-                  }
-                  return null;
-                },
+                items: paintingStatuses
+                    .map(
+                      (r) => DropdownMenuItem(
+                        value: r['id'] as int,
+                        child: Text(r['name']),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (v) => setState(() => selectedPaintingStatusId = v),
+                validator: (v) =>
+                    v == null ? 'Debe seleccionar un estado' : null,
               ),
               const SizedBox(height: 16),
 
-              // Ejército (ya obligatorio si quieres, pero lo dejamos opcional)
-              DropdownButtonFormField<Army>(
-                value: selectedArmy,
-                decoration: const InputDecoration(labelText: 'Ejército'),
-                items: armies
-                    .map((a) => DropdownMenuItem(value: a, child: Text(a.name)))
-                    .toList(),
-                onChanged: (value) => setState(() => selectedArmy = value),
-                validator: (v) =>
-                    v == null ? 'Debe seleccionar un ejército' : null,
+              // Complejidad de pintado (slider) - opcional, no valida
+              Row(
+                children: [
+                  const Text('Complejidad de pintado:'),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Slider(
+                      min: 1,
+                      max: 10,
+                      divisions: 9,
+                      label: '$paintingDifficulty',
+                      value: paintingDifficulty.toDouble(),
+                      onChanged: (v) =>
+                          setState(() => paintingDifficulty = v.toInt()),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
 
@@ -277,46 +351,6 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
                     return 'Debe de ser un precio válido';
                   return null;
                 },
-              ),
-              const SizedBox(height: 16),
-
-              // Estado de pintado (opcional, por defecto carga el primero)
-              DropdownButtonFormField<int>(
-                value: selectedPaintingStatusId,
-                decoration: const InputDecoration(
-                  labelText: 'Estado de pintado',
-                ),
-                items: paintingStatuses
-                    .map(
-                      (r) => DropdownMenuItem(
-                        value: r['id'] as int,
-                        child: Text(r['name']),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (v) => setState(() => selectedPaintingStatusId = v),
-                validator: (v) =>
-                    v == null ? 'Debe seleccionar un estado' : null,
-              ),
-              const SizedBox(height: 16),
-
-              // Complejidad de pintado (slider) - opcional, no valida
-              Row(
-                children: [
-                  const Text('Complejidad de pintado:'),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Slider(
-                      min: 1,
-                      max: 10,
-                      divisions: 9,
-                      label: '$paintingDifficulty',
-                      value: paintingDifficulty.toDouble(),
-                      onChanged: (v) =>
-                          setState(() => paintingDifficulty = v.toInt()),
-                    ),
-                  ),
-                ],
               ),
               const SizedBox(height: 16),
 
