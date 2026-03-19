@@ -187,23 +187,39 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
           key: _formKey,
           child: ListView(
             children: [
-              // Nombre
+              // Nombre obligatorio
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(labelText: 'Nombre'),
-                validator: (v) =>
-                    v == null || v.isEmpty ? 'Nombre obligatorio' : null,
+                validator: (v) {
+                  if (v == null || v.trim().isEmpty) {
+                    return 'Es obligatorio';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 16),
 
+              // Número de Miniaturas obligatorio y entero
               TextFormField(
                 controller: _miniaturesController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Número de Miniaturas'),
+                decoration: const InputDecoration(
+                  labelText: 'Número de Miniaturas',
+                ),
+                validator: (v) {
+                  if (v == null || v.trim().isEmpty) {
+                    return 'Es obligatorio';
+                  }
+                  if (int.tryParse(v) == null) {
+                    return 'Debe de ser un número entero';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 16),
 
-              // Ejército
+              // Ejército (ya obligatorio si quieres, pero lo dejamos opcional)
               DropdownButtonFormField<Army>(
                 value: selectedArmy,
                 decoration: const InputDecoration(labelText: 'Ejército'),
@@ -211,15 +227,18 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
                     .map((a) => DropdownMenuItem(value: a, child: Text(a.name)))
                     .toList(),
                 onChanged: (value) => setState(() => selectedArmy = value),
+                validator: (v) =>
+                    v == null ? 'Debe seleccionar un ejército' : null,
               ),
               const SizedBox(height: 16),
 
-              // Rol de batalla
+              // Rol de batalla obligatorio, con "Seleccione..." por defecto
               DropdownButtonFormField<int>(
-                value: roles.any((r) => r['id'] == selectedRoleId)
-                    ? selectedRoleId
-                    : (roles.isNotEmpty ? roles.first['id'] as int : null),
+                value: selectedRoleId,
                 decoration: const InputDecoration(labelText: 'Rol de batalla'),
+                hint: const Text(
+                  'Seleccione un rol...',
+                ), // Esto aparece si no hay valor
                 items: roles
                     .map(
                       (r) => DropdownMenuItem(
@@ -229,35 +248,41 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
                     )
                     .toList(),
                 onChanged: (v) => setState(() => selectedRoleId = v),
+                validator: (v) => v == null ? 'Es obligatorio' : null,
               ),
               const SizedBox(height: 16),
 
-              // Puntos
+              // Puntos opcional, pero si hay valor debe ser entero
               TextFormField(
                 controller: _pointsController,
-                decoration: const InputDecoration(labelText: 'Puntos'),
                 keyboardType: TextInputType.number,
+                decoration: const InputDecoration(labelText: 'Puntos'),
+                validator: (v) {
+                  if (v == null || v.trim().isEmpty) return null; // opcional
+                  if (int.tryParse(v) == null)
+                    return 'Debe de ser un número entero';
+                  return null;
+                },
               ),
               const SizedBox(height: 16),
 
-              // Precio
+              // Precio opcional, pero si hay valor debe ser numérico
               TextFormField(
                 controller: _priceController,
-                decoration: const InputDecoration(labelText: 'Precio (€)'),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
+                decoration: const InputDecoration(labelText: 'Precio (€)'),
+                validator: (v) {
+                  if (v == null || v.trim().isEmpty) return null; // opcional
+                  if (double.tryParse(v) == null)
+                    return 'Debe de ser un precio válido';
+                  return null;
+                },
               ),
               const SizedBox(height: 16),
 
-              // Estado de pintado
+              // Estado de pintado (opcional, por defecto carga el primero)
               DropdownButtonFormField<int>(
-                value:
-                    paintingStatuses.any(
-                      (r) => r['id'] == selectedPaintingStatusId,
-                    )
-                    ? selectedPaintingStatusId
-                    : (paintingStatuses.isNotEmpty
-                          ? paintingStatuses.first['id'] as int
-                          : null),
+                value: selectedPaintingStatusId,
                 decoration: const InputDecoration(
                   labelText: 'Estado de pintado',
                 ),
@@ -270,10 +295,12 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
                     )
                     .toList(),
                 onChanged: (v) => setState(() => selectedPaintingStatusId = v),
+                validator: (v) =>
+                    v == null ? 'Debe seleccionar un estado' : null,
               ),
               const SizedBox(height: 16),
 
-              // Complejidad de pintado
+              // Complejidad de pintado (slider) - opcional, no valida
               Row(
                 children: [
                   const Text('Complejidad de pintado:'),
@@ -293,7 +320,7 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Fecha de compra
+              // Fechas y observaciones son opcionales, no necesitan validator
               Row(
                 children: [
                   const Text('Fecha de compra: '),
@@ -310,7 +337,6 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Fecha de finalización
               Row(
                 children: [
                   const Text('Fecha de finalización: '),
@@ -327,30 +353,41 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Observaciones
               TextFormField(
                 controller: _notesController,
                 decoration: const InputDecoration(labelText: 'Observaciones'),
                 maxLines: 3,
               ),
-              const SizedBox(height: 24),
-
-              // Guardar
-              ElevatedButton(
-                onPressed: _saveUnit,
-                child: const Text('Guardar'),
-              ),
             ],
           ),
         ),
       ),
-      floatingActionButton: widget.unit != null
-          ? FloatingActionButton(
-              backgroundColor: Colors.red,
-              onPressed: _deleteUnit,
-              child: const Icon(Icons.delete),
-            )
-          : null,
+      floatingActionButton: Stack(
+        children: [
+          // Botón de Guardar
+          Positioned(
+            bottom: 16,
+            right: 16,
+            child: FloatingActionButton(
+              onPressed: _saveUnit,
+              backgroundColor: Colors.green, // color que uses normalmente
+              child: const Icon(Icons.save),
+            ),
+          ),
+
+          // Botón de Borrar (solo si editando)
+          if (widget.unit != null)
+            Positioned(
+              bottom: 90,
+              right: 16,
+              child: FloatingActionButton(
+                backgroundColor: Colors.red,
+                onPressed: _deleteUnit,
+                child: const Icon(Icons.delete),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
