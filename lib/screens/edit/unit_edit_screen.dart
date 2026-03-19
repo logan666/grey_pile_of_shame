@@ -21,6 +21,7 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
   final _pointsController = TextEditingController();
   final _priceController = TextEditingController();
   final _notesController = TextEditingController();
+  final _miniaturesController = TextEditingController();
 
   Army? selectedArmy;
   int? selectedRoleId;
@@ -57,6 +58,7 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
     if (widget.unit != null) {
       final u = widget.unit!;
       _nameController.text = u.name;
+      _miniaturesController.text = u.miniatures.toString();
       _pointsController.text = u.points.toString();
       _priceController.text = (u.price ?? 0.0).toStringAsFixed(2);
       _notesController.text = u.notes ?? '';
@@ -115,6 +117,7 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
     final unitMap = {
       'name': _nameController.text.trim(),
       'army_id': selectedArmy!.id,
+      'miniatures': int.tryParse(_miniaturesController.text) ?? 1,
       'role_id': selectedRoleId,
       'points': int.tryParse(_pointsController.text) ?? 0,
       'price': double.tryParse(_priceController.text) ?? 0.0,
@@ -194,6 +197,7 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
               const SizedBox(height: 16),
 
               TextFormField(
+                controller: _miniaturesController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(labelText: 'Número de Miniaturas'),
               ),
@@ -212,7 +216,9 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
 
               // Rol de batalla
               DropdownButtonFormField<int>(
-                value: selectedRoleId,
+                value: roles.any((r) => r['id'] == selectedRoleId)
+                    ? selectedRoleId
+                    : (roles.isNotEmpty ? roles.first['id'] as int : null),
                 decoration: const InputDecoration(labelText: 'Rol de batalla'),
                 items: roles
                     .map(
@@ -244,7 +250,14 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
 
               // Estado de pintado
               DropdownButtonFormField<int>(
-                value: selectedPaintingStatusId,
+                value:
+                    paintingStatuses.any(
+                      (r) => r['id'] == selectedPaintingStatusId,
+                    )
+                    ? selectedPaintingStatusId
+                    : (paintingStatuses.isNotEmpty
+                          ? paintingStatuses.first['id'] as int
+                          : null),
                 decoration: const InputDecoration(
                   labelText: 'Estado de pintado',
                 ),
