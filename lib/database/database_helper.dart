@@ -16,10 +16,15 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     final path = join(await getDatabasesPath(), 'grey_pile_of_shame.db');
-    return await openDatabase(path, version: 1, onCreate: _onCreate);
+    return await openDatabase(
+      path,
+      version: 2,
+      onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
+    );
   }
 
-  Future _onCreate(Database db, int version) async {
+  Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE games (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -39,6 +44,7 @@ class DatabaseHelper {
       CREATE TABLE units (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
+        miniatures INTEGER NOT NULL DEFAULT 1,
         army_id INTEGER NOT NULL,
         role_id INTEGER NOT NULL,
         points INTEGER NOT NULL DEFAULT 0,
@@ -64,5 +70,17 @@ class DatabaseHelper {
           name TEXT NOT NULL
       );
     ''');
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      try {
+        await db.execute(
+          'ALTER TABLE units ADD COLUMN miniatures INTEGER NOT NULL DEFAULT 1',
+        );
+      } catch (e) {
+        print('miniatures ya existe');
+      }
+    }
   }
 }

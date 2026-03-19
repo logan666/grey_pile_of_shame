@@ -2,6 +2,7 @@ class Unit {
   final int? id;
   final int? armyId; // referencia a Army
   final String name;
+  final int miniatures;
   final int? roleId; // referencia a tabla roles
   final int? points; // valor en puntos
   final double? price; // precio en euros
@@ -15,6 +16,7 @@ class Unit {
     this.id,
     required this.armyId,
     required this.name,
+    required this.miniatures,
     this.roleId,
     this.points,
     this.price,
@@ -30,6 +32,7 @@ class Unit {
       'id': id,
       'army_id': armyId,
       'name': name,
+      'miniatures': miniatures,
       'role_id': roleId,
       'points': points,
       'price': price,
@@ -46,6 +49,7 @@ class Unit {
       id: map['id'] as int?,
       armyId: map['army_id'] as int,
       name: map['name'] as String,
+      miniatures: map['miniatures'] as int? ?? 1,
       roleId: map['role_id'] as int,
       points: map['points'] as int? ?? 0,
       price: (map['price'] as num?)?.toDouble() ?? 0.0,

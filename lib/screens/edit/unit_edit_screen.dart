@@ -193,6 +193,12 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
               ),
               const SizedBox(height: 16),
 
+              TextFormField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(labelText: 'Número de Miniaturas'),
+              ),
+              const SizedBox(height: 16),
+
               // Ejército
               DropdownButtonFormField<Army>(
                 value: selectedArmy,
