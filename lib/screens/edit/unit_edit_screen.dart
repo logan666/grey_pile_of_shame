@@ -361,7 +361,7 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
                   Text(
                     purchasedAt != null
                         ? '${purchasedAt!.day}/${purchasedAt!.month}/${purchasedAt!.year}'
-                        : 'No seleccionada',
+                        : '',
                   ),
                   IconButton(
                     icon: const Icon(Icons.calendar_today),
@@ -377,7 +377,7 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
                   Text(
                     finishedAt != null
                         ? '${finishedAt!.day}/${finishedAt!.month}/${finishedAt!.year}'
-                        : 'No seleccionada',
+                        : '',
                   ),
                   IconButton(
                     icon: const Icon(Icons.calendar_today),

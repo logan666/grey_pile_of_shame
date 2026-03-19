@@ -61,7 +61,8 @@ class DatabaseHelper {
       CREATE TABLE roles (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT NOT NULL,
-          orden INTEGER NOT NULL
+          orden INTEGER NOT NULL,
+          code TEXT NOT NULL
       );
     ''');
 
@@ -94,6 +95,8 @@ class DatabaseHelper {
         await db.execute(
           'ALTER TABLE painting_status ADD COLUMN orden INTEGER DEFAULT 0',
         );
+
+        await db.execute('ALTER TABLE roles ADD COLUMN code TEXT');
       } catch (e) {
         print('orden ya existe');
       }

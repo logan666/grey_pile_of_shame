@@ -5,6 +5,7 @@ import 'package:grey_pile_of_shame/database/repository/unit_repository.dart';
 import 'package:grey_pile_of_shame/models/unit.dart';
 import 'package:grey_pile_of_shame/models/army.dart';
 import 'package:grey_pile_of_shame/screens/edit/unit_edit_screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class UnitScreen extends StatefulWidget {
   final Army army;
@@ -22,6 +23,7 @@ class _UnitScreenState extends State<UnitScreen> {
   List<Unit> units = [];
   List<Map<String, dynamic>> roles = [];
   Map<int, String> roleNames = {};
+  Map<int, String> roleCodes = {};
 
   @override
   void initState() {
@@ -32,6 +34,7 @@ class _UnitScreenState extends State<UnitScreen> {
   Future<void> _loadRoles() async {
     roles = await parametricRepository.getRoles();
     roleNames = {for (var r in roles) r['id'] as int: r['name'] as String};
+    roleCodes = {for (var r in roles) r['id'] as int: r['code'] as String};
   }
 
   Future<void> loadUnits() async {
@@ -137,7 +140,12 @@ class _UnitScreenState extends State<UnitScreen> {
                     //border: Border.all(color: Colors.grey), // borde fino
                   ),
                   child: ExpansionTile(
-                    leading: const Icon(Icons.shield, color: Colors.black),
+                    leading: Image.asset(
+                      'assets/icons/rol/${roleCodes.entries.firstWhere((e) => roleNames[e.key] == roleName, orElse: () => MapEntry(0, 'default')).value}.png',
+                      width: 28,
+                      height: 28,
+                      fit: BoxFit.contain,
+                    ),
                     title: Text(
                       roleName,
                       style: const TextStyle(
