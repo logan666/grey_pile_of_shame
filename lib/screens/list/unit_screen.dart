@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grey_pile_of_shame/database/repository/army_repository.dart';
+import 'package:grey_pile_of_shame/database/repository/parametric_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/unit_repository.dart';
 import 'package:grey_pile_of_shame/models/unit.dart';
 import 'package:grey_pile_of_shame/models/army.dart';
@@ -16,12 +17,21 @@ class UnitScreen extends StatefulWidget {
 class _UnitScreenState extends State<UnitScreen> {
   final unitRepository = UnitRepository();
   final armyRepository = ArmyRepository();
+  final parametricRepository = ParametricRepository();
+
   List<Unit> units = [];
+  List<Map<String, dynamic>> roles = [];
+  Map<int, String> roleNames = {};
 
   @override
   void initState() {
     super.initState();
-    loadUnits();
+    _loadRoles().then((_) => loadUnits());
+  }
+
+  Future<void> _loadRoles() async {
+    roles = await parametricRepository.getRoles();
+    roleNames = {for (var r in roles) r['id'] as int: r['name'] as String};
   }
 
   Future<void> loadUnits() async {
@@ -95,19 +105,54 @@ class _UnitScreenState extends State<UnitScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Agrupar unidades por rol
+    Map<String, List<Unit>> unitsByRole = {};
+    for (var unit in units) {
+      final roleName = roleNames[unit.roleId ?? 0] ?? 'Sin rol';
+      if (!unitsByRole.containsKey(roleName)) {
+        unitsByRole[roleName] = [];
+      }
+      unitsByRole[roleName]!.add(unit);
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text(widget.army.name)),
       body: units.isEmpty
           ? const Center(child: Text('No hay unidades todavía'))
-          : ListView.builder(
-              itemCount: units.length,
-              itemBuilder: (context, index) {
-                final unit = units[index];
-                return ListTile(
-                  title: Text(unit.name),
-                  onTap: () => _openUnitEditor(unit: unit),
+          : ListView(
+              children: unitsByRole.entries.map((entry) {
+                final roleName = entry.key;
+                final roleUnits = entry.value;
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Encabezado del rol con icono
+                    ListTile(
+                      leading: const Icon(Icons.shield, color: Colors.blue),
+                      title: Text(
+                        roleName,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+
+                    // Unidades de ese rol
+                    ...roleUnits.map(
+                      (unit) => Padding(
+                        padding: const EdgeInsets.only(left: 40),
+                        child: ListTile(
+                          leading: const Icon(Icons.person),
+                          title: Text(unit.name),
+                          onTap: () => _openUnitEditor(unit: unit),
+                        ),
+                      ),
+                    ),
+                  ],
                 );
-              },
+              }).toList(),
             ),
       floatingActionButton: Stack(
         children: [
