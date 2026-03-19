@@ -37,8 +37,10 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
     for (var mini in miniatures) {
       if (!paintingStatuses.any((s) => s['id'] == mini.paintingStatus)) {
         print(
-          'Miniatura "${mini.description}" tiene estado inválido: ${mini.paintingStatus}',
+          '>>>>>>>>>>>>>>>>> Miniatura "${mini.description}" tiene estado inválido: ${mini.paintingStatus}',
         );
+        mini.paintingStatus =
+            paintingStatuses.first['id']; // opcional: asignar un valor válido
       }
     }
   }
@@ -112,8 +114,16 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
             ? baseDescription
             : ('$baseDescription ${i + 1}');
 
+        final defaultStatusId = paintingStatuses.isNotEmpty
+            ? paintingStatuses.first['id'] as int
+            : 1;
+
         await repo.insertMiniature(
-          Miniature(unitId: widget.unit.id!, description: description),
+          Miniature(
+            unitId: widget.unit.id!,
+            description: description,
+            paintingStatus: defaultStatusId,
+          ),
         );
       }
 
@@ -199,15 +209,6 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
     }
   }
 
-  Color _statusColor(int statusId) {
-    final status = paintingStatuses.firstWhere(
-      (s) => s['id'] == statusId,
-      orElse: () => {'color': '#9E9E9E'},
-    );
-
-    return _hexToColor(status['color']);
-  }
-
   Color _hexToColor(String hex) {
     final buffer = StringBuffer();
     if (hex.length == 7) buffer.write('ff');
@@ -233,28 +234,80 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
         itemCount: miniatures.length,
         itemBuilder: (context, index) {
           final mini = miniatures[index];
+          final status = paintingStatuses.firstWhere(
+            (s) => s['id'] == mini.paintingStatus,
+            orElse: () => {'name': 'Desconocido', 'color': '#9E9E9E'},
+          );
+          final statusColor = _hexToColor(status['color']);
+          final statusName = status['name'];
+
           return Container(
             margin: const EdgeInsets.symmetric(vertical: 8),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: _statusColor(mini.paintingStatus),
-                minimumSize: const Size.fromHeight(60),
-              ),
-              onPressed: () => _changeStatus(mini),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+            child: GestureDetector(
+              onTap: () => _changeStatus(mini), // Abrir selección de estado
+              child: Stack(
                 children: [
-                  Text(
-                    mini.description,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  // Botón cuadrado con imagen
+                  Container(
+                    height: 120,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      image: const DecorationImage(
+                        image: AssetImage(
+                          'assets/images/marine.png',
+                        ), // Imagen del marine
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.black26),
+                    ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    paintingStatuses.firstWhere(
-                          (s) => s['id'] == mini.paintingStatus,
-                        )['name'] ??
-                        '',
-                    style: const TextStyle(fontSize: 12),
+
+                  // Círculo de color en la esquina superior izquierda
+                  Positioned(
+                    top: 8,
+                    left: 8,
+                    child: Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: statusColor,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.black26),
+                      ),
+                    ),
+                  ),
+
+                  // Texto de descripción y estado debajo de la imagen
+                  Positioned(
+                    bottom: 8,
+                    left: 8,
+                    right: 8,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          mini.description,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              Shadow(blurRadius: 2, color: Colors.black),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          statusName,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                            shadows: [
+                              Shadow(blurRadius: 2, color: Colors.black),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
