@@ -146,17 +146,21 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
             onPressed: () => Navigator.pop(context, id),
             child: Row(
               children: [
+                // Cambiamos a un círculo
                 Container(
                   width: 24,
                   height: 24,
                   decoration: BoxDecoration(
                     color: color,
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: Colors.black26),
+                    shape: BoxShape.circle, // <-- círculo
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 2,
+                    ), // borde negro
                   ),
                 ),
                 const SizedBox(width: 12),
-                Text(name),
+                Text(name, style: const TextStyle(color: Colors.black)),
               ],
             ),
           );
@@ -185,17 +189,21 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
             onPressed: () => Navigator.pop(context, id),
             child: Row(
               children: [
+                // Cambiamos a un círculo
                 Container(
                   width: 24,
                   height: 24,
                   decoration: BoxDecoration(
                     color: color,
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: Colors.black26),
+                    shape: BoxShape.circle, // <-- círculo
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 2,
+                    ), // borde negro
                   ),
                 ),
                 const SizedBox(width: 12),
-                Text(name),
+                Text(name, style: const TextStyle(color: Colors.black)),
               ],
             ),
           );
@@ -259,7 +267,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.black26),
+                      border: Border.all(color: Colors.black),
                     ),
                   ),
 
@@ -273,7 +281,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
                       decoration: BoxDecoration(
                         color: statusColor,
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.black26),
+                        border: Border.all(color: Colors.black, width: 2),
                       ),
                     ),
                   ),
