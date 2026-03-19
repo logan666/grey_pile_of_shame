@@ -5,7 +5,6 @@ import 'package:grey_pile_of_shame/database/repository/unit_repository.dart';
 import 'package:grey_pile_of_shame/models/unit.dart';
 import 'package:grey_pile_of_shame/models/army.dart';
 import 'package:grey_pile_of_shame/screens/edit/unit_edit_screen.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class UnitScreen extends StatefulWidget {
   final Army army;
