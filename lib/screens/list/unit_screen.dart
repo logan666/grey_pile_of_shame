@@ -24,7 +24,7 @@ class _UnitScreenState extends State<UnitScreen> {
   List<Map<String, dynamic>> roles = [];
   Map<int, String> roleNames = {};
   Map<int, String> roleCodes = {};
-  Map<int, double> unitProgress = {};
+  Map<int, Map<String, int>> unitProgress = {}; // finished + total
 
   @override
   void initState() {
@@ -41,18 +41,18 @@ class _UnitScreenState extends State<UnitScreen> {
   Future<void> loadUnits() async {
     final data = await unitRepository.getUnits(widget.army.id!);
 
-    Map<int, double> progressMap = {};
+    Map<int, Map<String, int>> progressMap = {};
 
     for (var unit in data) {
       final stats = await unitRepository.getMiniatureStats(unit.id!);
       final total = stats['total'] ?? 0;
       final finished = stats['finished'] ?? 0;
-      progressMap[unit.id!] = total > 0 ? finished / total : 0;
+      progressMap[unit.id!] = {'finished': finished, 'total': total};
     }
 
     setState(() {
       units = data;
-      unitProgress = progressMap; // siempre recalcular
+      unitProgress = progressMap;
     });
   }
 
@@ -73,7 +73,7 @@ class _UnitScreenState extends State<UnitScreen> {
     );
 
     if (result != null && result is Map<String, dynamic>) {
-      await loadUnits(); // recargar siempre
+      await loadUnits();
 
       final action = result['action'];
       final name = result['name'];
@@ -172,33 +172,33 @@ class _UnitScreenState extends State<UnitScreen> {
                       ),
                     ),
                     children: roleUnits.map((unit) {
+                      final finished = unitProgress[unit.id!]?['finished'] ?? 0;
+                      final total = unitProgress[unit.id!]?['total'] ?? 0;
+                      final progress = total > 0 ? finished / total : 0.0;
+
                       return ListTile(
                         leading: const Icon(Icons.person),
                         title: InkWell(
                           borderRadius: BorderRadius.circular(4),
                           onTap: () => _openMiniaturesScreen(unit),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 8,
-                            ), // amplia zona vertical
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(unit.name),
                                 const SizedBox(height: 6),
                                 LinearProgressIndicator(
-                                  value: unitProgress[unit.id!] ?? 0,
+                                  value: progress,
                                   minHeight: 6,
                                   backgroundColor: Colors.grey[300],
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                    getProgressColor(
-                                      unitProgress[unit.id!] ?? 0,
-                                    ),
+                                    getProgressColor(progress),
                                   ),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  '${((unitProgress[unit.id!] ?? 0) * 100).toInt()}%',
+                                  '$finished de $total (${(progress * 100).toInt()}%)',
                                   style: const TextStyle(fontSize: 12),
                                 ),
                               ],
