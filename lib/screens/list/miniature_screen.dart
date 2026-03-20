@@ -310,7 +310,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
                           ),
                         ),
                         if (_isFinishedStatus(status['id']))
-                          Icon(Icons.check, size: 16, color: Colors.black),
+                          Icon(Icons.check, size: 18, color: Colors.white),
                       ],
                     ),
                   ),
