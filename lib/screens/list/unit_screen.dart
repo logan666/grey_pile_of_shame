@@ -24,6 +24,7 @@ class _UnitScreenState extends State<UnitScreen> {
   List<Map<String, dynamic>> roles = [];
   Map<int, String> roleNames = {};
   Map<int, String> roleCodes = {};
+  Map<int, double> unitProgress = {};
 
   @override
   void initState() {
@@ -39,8 +40,19 @@ class _UnitScreenState extends State<UnitScreen> {
 
   Future<void> loadUnits() async {
     final data = await unitRepository.getUnits(widget.army.id!);
+
+    Map<int, double> progressMap = {};
+
+    for (var unit in data) {
+      final stats = await unitRepository.getMiniatureStats(unit.id!);
+      final total = stats['total'] ?? 0;
+      final finished = stats['finished'] ?? 0;
+      progressMap[unit.id!] = total > 0 ? finished / total : 0;
+    }
+
     setState(() {
       units = data;
+      unitProgress = progressMap; // siempre recalcular
     });
   }
 
@@ -49,7 +61,6 @@ class _UnitScreenState extends State<UnitScreen> {
       context,
       MaterialPageRoute(builder: (_) => MiniatureScreen(unit: unit)),
     );
-
     await loadUnits();
   }
 
@@ -62,10 +73,10 @@ class _UnitScreenState extends State<UnitScreen> {
     );
 
     if (result != null && result is Map<String, dynamic>) {
+      await loadUnits(); // recargar siempre
+
       final action = result['action'];
       final name = result['name'];
-      await loadUnits();
-
       String message = '';
       if (action == 'created') {
         message = 'Unidad "$name" creada correctamente';
@@ -105,14 +116,18 @@ class _UnitScreenState extends State<UnitScreen> {
     );
 
     if (confirm ?? false) {
-      await armyRepository.deleteArmy(
-        widget.army.id!,
-      ); // Asumiendo que tu repo tiene este método
+      await armyRepository.deleteArmy(widget.army.id!);
       Navigator.pop(context, {
         'action': 'deletedArmy',
         'name': widget.army.name,
       });
     }
+  }
+
+  Color getProgressColor(double value) {
+    if (value < 0.3) return Colors.red;
+    if (value < 0.7) return Colors.orange;
+    return Colors.green;
   }
 
   @override
@@ -121,9 +136,7 @@ class _UnitScreenState extends State<UnitScreen> {
     Map<String, List<Unit>> unitsByRole = {};
     for (var unit in units) {
       final roleName = roleNames[unit.roleId ?? 0] ?? 'Sin rol';
-      if (!unitsByRole.containsKey(roleName)) {
-        unitsByRole[roleName] = [];
-      }
+      unitsByRole.putIfAbsent(roleName, () => []);
       unitsByRole[roleName]!.add(unit);
     }
 
@@ -142,11 +155,7 @@ class _UnitScreenState extends State<UnitScreen> {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    //color: Colors.grey[200], // fondo ligero
-                    borderRadius: BorderRadius.circular(
-                      6,
-                    ), // bordes redondeados opcionales
-                    //border: Border.all(color: Colors.grey), // borde fino
+                    borderRadius: BorderRadius.circular(6),
                   ),
                   child: ExpansionTile(
                     leading: Image.asset(
@@ -165,9 +174,36 @@ class _UnitScreenState extends State<UnitScreen> {
                     children: roleUnits.map((unit) {
                       return ListTile(
                         leading: const Icon(Icons.person),
-                        title: GestureDetector(
-                          child: Text(unit.name),
+                        title: InkWell(
+                          borderRadius: BorderRadius.circular(4),
                           onTap: () => _openMiniaturesScreen(unit),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                            ), // amplia zona vertical
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(unit.name),
+                                const SizedBox(height: 6),
+                                LinearProgressIndicator(
+                                  value: unitProgress[unit.id!] ?? 0,
+                                  minHeight: 6,
+                                  backgroundColor: Colors.grey[300],
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    getProgressColor(
+                                      unitProgress[unit.id!] ?? 0,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  '${((unitProgress[unit.id!] ?? 0) * 100).toInt()}%',
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                         trailing: IconButton(
                           icon: const Icon(Icons.edit),

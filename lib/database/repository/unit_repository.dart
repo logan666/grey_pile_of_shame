@@ -19,4 +19,8 @@ class UnitRepository {
   Future<int> deleteUnit(int id) async {
     return _unitDao.deleteUnit(id);
   }
+
+  Future<Map<String, int>> getMiniatureStats(int unitId) {
+    return _unitDao.getMiniatureStats(unitId);
+  }
 }

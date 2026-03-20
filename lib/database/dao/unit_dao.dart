@@ -29,4 +29,28 @@ class UnitDao {
     final db = await dbHelper.database;
     return await db.delete('units', where: 'id = ?', whereArgs: [id]);
   }
+
+  Future<Map<String, int>> getMiniatureStats(int unitId) async {
+    final db = await DatabaseHelper().database;
+
+    final totalResult = await db.rawQuery(
+      'SELECT COUNT(*) as total FROM miniatures WHERE unit_id = ?',
+      [unitId],
+    );
+
+    final finishedResult = await db.rawQuery(
+      'SELECT COUNT(*) as finished FROM miniatures WHERE unit_id = ? AND painting_status = ?',
+      [unitId, 7], // 7 = terminada
+    );
+
+    final total = (totalResult.first['total'] ?? 0) is int
+        ? totalResult.first['total'] as int
+        : (totalResult.first['total'] as num).toInt();
+
+    final finished = (finishedResult.first['finished'] ?? 0) is int
+        ? finishedResult.first['finished'] as int
+        : (finishedResult.first['finished'] as num).toInt();
+
+    return {'total': total, 'finished': finished};
+  }
 }
