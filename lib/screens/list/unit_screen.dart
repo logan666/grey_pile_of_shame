@@ -186,8 +186,10 @@ class _UnitScreenState extends State<UnitScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                // Nombre de la unidad
                                 Text(unit.name),
                                 const SizedBox(height: 6),
+                                // Barra de progreso
                                 LinearProgressIndicator(
                                   value: progress,
                                   minHeight: 6,
@@ -197,9 +199,18 @@ class _UnitScreenState extends State<UnitScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 4),
-                                Text(
-                                  '$finished de $total (${(progress * 100).toInt()}%)',
-                                  style: const TextStyle(fontSize: 12),
+                                // Totales alineados a la derecha con margen
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 4),
+                                  child: Row(
+                                    children: [
+                                      const Spacer(),
+                                      Text(
+                                        '$finished de $total (${(progress * 100).toInt()}%)',
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
