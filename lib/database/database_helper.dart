@@ -44,12 +44,10 @@ class DatabaseHelper {
       CREATE TABLE units (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
-        miniatures INTEGER NOT NULL DEFAULT 1,
         army_id INTEGER NOT NULL,
         role_id INTEGER NOT NULL,
         points INTEGER NOT NULL DEFAULT 0,
         price REAL NOT NULL DEFAULT 0.0,
-        painting_status_id INTEGER NOT NULL DEFAULT 0,
         painting_difficulty INTEGER NOT NULL DEFAULT 1,
         finished_at TEXT,
         purchased_at TEXT,

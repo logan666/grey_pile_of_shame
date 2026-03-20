@@ -21,7 +21,6 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
   final _pointsController = TextEditingController();
   final _priceController = TextEditingController();
   final _notesController = TextEditingController();
-  final _miniaturesController = TextEditingController();
 
   Army? selectedArmy;
   int? selectedRoleId;
@@ -58,13 +57,11 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
     if (widget.unit != null) {
       final u = widget.unit!;
       _nameController.text = u.name;
-      _miniaturesController.text = u.miniatures.toString();
       _pointsController.text = u.points.toString();
       _priceController.text = (u.price ?? 0.0).toStringAsFixed(2);
       _notesController.text = u.notes ?? '';
       paintingDifficulty = u.paintingDifficulty;
       selectedRoleId = u.roleId;
-      selectedPaintingStatusId = u.paintingStatusId;
       finishedAt = u.finishedAt;
       purchasedAt = u.purchasedAt;
 
@@ -117,11 +114,9 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
     final unitMap = {
       'name': _nameController.text.trim(),
       'army_id': selectedArmy!.id,
-      'miniatures': int.tryParse(_miniaturesController.text) ?? 1,
       'role_id': selectedRoleId,
       'points': int.tryParse(_pointsController.text) ?? 0,
       'price': double.tryParse(_priceController.text) ?? 0.0,
-      'painting_status_id': selectedPaintingStatusId,
       'painting_difficulty': paintingDifficulty,
       'finished_at': finishedAt?.toIso8601String(),
       'purchased_at': purchasedAt?.toIso8601String(),
@@ -230,79 +225,6 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
                     .toList(),
                 onChanged: (v) => setState(() => selectedRoleId = v),
                 validator: (v) => v == null ? 'Es obligatorio' : null,
-              ),
-              const SizedBox(height: 16),
-
-              // Número de Miniaturas obligatorio y entero
-              Row(
-                children: [
-                  const Text('Número de Miniaturas:'),
-                  const SizedBox(width: 16),
-                  IconButton(
-                    icon: const Icon(Icons.remove),
-                    onPressed: () {
-                      int current =
-                          int.tryParse(_miniaturesController.text) ?? 1;
-                      if (current > 1) {
-                        current--;
-                        setState(
-                          () => _miniaturesController.text = current.toString(),
-                        );
-                      }
-                    },
-                  ),
-                  SizedBox(
-                    width: 50,
-                    child: TextFormField(
-                      controller: _miniaturesController
-                        ..text = _miniaturesController.text.isEmpty
-                            ? '1'
-                            : _miniaturesController.text,
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      validator: (v) {
-                        if (v == null || v.trim().isEmpty) {
-                          return 'Número de miniaturas obligatorio';
-                        }
-                        if (int.tryParse(v) == null)
-                          return 'Debe ser un número entero';
-                        return null;
-                      },
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () {
-                      int current =
-                          int.tryParse(_miniaturesController.text) ?? 1;
-                      current++;
-                      setState(
-                        () => _miniaturesController.text = current.toString(),
-                      );
-                    },
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-
-              // Estado de pintado (opcional, por defecto carga el primero)
-              DropdownButtonFormField<int>(
-                value: selectedPaintingStatusId,
-                decoration: const InputDecoration(
-                  labelText: 'Estado de pintado',
-                ),
-                items: paintingStatuses
-                    .map(
-                      (r) => DropdownMenuItem(
-                        value: r['id'] as int,
-                        child: Text(r['name']),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (v) => setState(() => selectedPaintingStatusId = v),
-                validator: (v) =>
-                    v == null ? 'Debe seleccionar un estado' : null,
               ),
               const SizedBox(height: 16),
 

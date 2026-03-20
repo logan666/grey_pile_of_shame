@@ -301,7 +301,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             shadows: [
-                              Shadow(blurRadius: 2, color: Colors.black),
+                              Shadow(blurRadius: 1, color: Colors.black),
                             ],
                           ),
                         ),
@@ -311,7 +311,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
                             color: Colors.black,
                             fontSize: 16,
                             shadows: [
-                              Shadow(blurRadius: 2, color: Colors.black),
+                              Shadow(blurRadius: 1, color: Colors.black),
                             ],
                           ),
                         ),
