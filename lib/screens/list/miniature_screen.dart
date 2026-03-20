@@ -136,7 +136,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
     final selectedStatusId = await showDialog<int>(
       context: context,
       builder: (_) => SimpleDialog(
-        title: Text('Cambiar estado de "${mini.description}"'),
+        title: Text(mini.description),
         children: [
           ...paintingStatuses.map((status) {
             final color = _hexToColor(status['color'] as String);
@@ -196,7 +196,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
     final newStatusId = await showDialog<int>(
       context: context,
       builder: (_) => SimpleDialog(
-        title: const Text('Aplicar a todas'),
+        title: const Text('La unidad completa'),
         children: paintingStatuses.map((status) {
           final color = _hexToColor(status['color'] as String);
           final name = status['name'] as String;
