@@ -37,7 +37,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
     for (var mini in miniatures) {
       if (!paintingStatuses.any((s) => s['id'] == mini.paintingStatus)) {
         print(
-          '>>>>>>>>>>>>>>>>> Miniatura "${mini.description}" tiene estado inválido: ${mini.paintingStatus}',
+          '>>> Miniatura "${mini.description}" tiene estado inválido: ${mini.paintingStatus}',
         );
         mini.paintingStatus =
             paintingStatuses.first['id']; // opcional: asignar un valor válido
@@ -46,7 +46,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
   }
 
   void _addMiniature() async {
-    final descriptionController = TextEditingController();
+    final descriptionController = TextEditingController(text: widget.unit.name);
     int quantity = 1;
 
     final result = await showDialog<bool>(
@@ -137,40 +137,57 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
       context: context,
       builder: (_) => SimpleDialog(
         title: Text('Cambiar estado de "${mini.description}"'),
-        children: paintingStatuses.map((status) {
-          final color = _hexToColor(status['color'] as String);
-          final name = status['name'] as String;
-          final id = status['id'] as int;
+        children: [
+          ...paintingStatuses.map((status) {
+            final color = _hexToColor(status['color'] as String);
+            final name = status['name'] as String;
+            final id = status['id'] as int;
 
-          return SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, id),
-            child: Row(
-              children: [
-                // Cambiamos a un círculo
-                Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: color,
-                    shape: BoxShape.circle, // <-- círculo
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 2,
-                    ), // borde negro
+            return SimpleDialogOption(
+              onPressed: () => Navigator.pop(context, id),
+              child: Row(
+                children: [
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: color,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.black, width: 2),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Text(name, style: const TextStyle(color: Colors.black)),
+                  const SizedBox(width: 12),
+                  Text(name, style: const TextStyle(color: Colors.black)),
+                ],
+              ),
+            );
+          }),
+
+          const SizedBox(height: 16),
+
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(context, -99), // código especial
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: const [
+                Icon(Icons.delete, color: Colors.red),
+                SizedBox(width: 12),
+                Text('Eliminar', style: TextStyle(color: Colors.red)),
               ],
             ),
-          );
-        }).toList(),
+          ),
+        ],
       ),
     );
 
     if (selectedStatusId != null) {
-      mini.paintingStatus = selectedStatusId;
-      await repo.updateMiniature(mini);
+      if (selectedStatusId == -99) {
+        await repo.deleteMiniature(mini.id!);
+      } else {
+        mini.paintingStatus = selectedStatusId;
+        await repo.updateMiniature(mini);
+      }
+
       await loadMiniatures();
     }
   }
@@ -224,6 +241,11 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
     return Color(int.parse(buffer.toString(), radix: 16));
   }
 
+  bool _isFinishedStatus(int statusId) {
+    final status = paintingStatuses.firstWhere((s) => s['id'] == statusId);
+    return status['name'].toLowerCase() == 'terminado';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -275,14 +297,21 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
                   Positioned(
                     top: 8,
                     left: 8,
-                    child: Container(
-                      width: 24,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: statusColor,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.black, width: 2),
-                      ),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: statusColor,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.black, width: 2),
+                          ),
+                        ),
+                        if (_isFinishedStatus(status['id']))
+                          Icon(Icons.check, size: 16, color: Colors.black),
+                      ],
                     ),
                   ),
 
