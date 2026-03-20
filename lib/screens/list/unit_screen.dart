@@ -64,6 +64,16 @@ class _UnitScreenState extends State<UnitScreen> {
     await loadUnits();
   }
 
+  double getArmyProgress() {
+    int totalFinished = 0;
+    int totalUnits = 0;
+    unitProgress.forEach((_, stats) {
+      totalFinished += stats['finished'] ?? 0;
+      totalUnits += stats['total'] ?? 0;
+    });
+    return totalUnits > 0 ? totalFinished / totalUnits : 0.0;
+  }
+
   Future<void> _openUnitEditor({Unit? unit}) async {
     final result = await Navigator.push(
       context,
@@ -144,87 +154,131 @@ class _UnitScreenState extends State<UnitScreen> {
       appBar: AppBar(title: Text(widget.army.name)),
       body: units.isEmpty
           ? const Center(child: Text('No hay unidades todavía'))
-          : ListView(
-              children: unitsByRole.entries.map((entry) {
-                final roleName = entry.key;
-                final roleUnits = entry.value;
-
-                return Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: ExpansionTile(
-                    leading: Image.asset(
-                      'assets/icons/rol/${roleCodes.entries.firstWhere((e) => roleNames[e.key] == roleName, orElse: () => MapEntry(0, 'default')).value}.png',
-                      width: 28,
-                      height: 28,
-                      fit: BoxFit.contain,
-                    ),
-                    title: Text(
-                      roleName,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+          : Column(
+              children: [
+                // Barra total del ejército
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 4),
+                      LinearProgressIndicator(
+                        value: getArmyProgress(),
+                        minHeight: 8,
+                        backgroundColor: Colors.grey[300],
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          getProgressColor(getArmyProgress()),
+                        ),
                       ),
-                    ),
-                    children: roleUnits.map((unit) {
-                      final finished = unitProgress[unit.id!]?['finished'] ?? 0;
-                      final total = unitProgress[unit.id!]?['total'] ?? 0;
-                      final progress = total > 0 ? finished / total : 0.0;
-
-                      return ListTile(
-                        leading: const Icon(Icons.person),
-                        title: InkWell(
-                          borderRadius: BorderRadius.circular(4),
-                          onTap: () => _openMiniaturesScreen(unit),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Nombre de la unidad
-                                Text(unit.name),
-                                const SizedBox(height: 6),
-                                // Barra de progreso
-                                LinearProgressIndicator(
-                                  value: progress,
-                                  minHeight: 6,
-                                  backgroundColor: Colors.grey[300],
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    getProgressColor(progress),
+                      const SizedBox(height: 4),
+                      // Totales alineados a la derecha
+                      Padding(
+                        padding: const EdgeInsets.only(right: 4),
+                        child: Row(
+                          children: [
+                            const Spacer(),
+                            Text(
+                              '${unitProgress.values.fold<int>(0, (sum, e) => sum + (e['finished'] ?? 0))} de ${unitProgress.values.fold<int>(0, (sum, e) => sum + (e['total'] ?? 0))} (${(getArmyProgress() * 100).toInt()}%)',
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(),
+                // Lista de unidades por rol
+                Expanded(
+                  child: ListView(
+                    children: unitsByRole.entries.map((entry) {
+                      final roleName = entry.key;
+                      final roleUnits = entry.value;
+                      return Container(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: ExpansionTile(
+                          leading: Image.asset(
+                            'assets/icons/rol/${roleCodes.entries.firstWhere((e) => roleNames[e.key] == roleName, orElse: () => MapEntry(0, 'default')).value}.png',
+                            width: 28,
+                            height: 28,
+                            fit: BoxFit.contain,
+                          ),
+                          title: Text(
+                            roleName,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          children: roleUnits.map((unit) {
+                            final finished =
+                                unitProgress[unit.id!]?['finished'] ?? 0;
+                            final total = unitProgress[unit.id!]?['total'] ?? 0;
+                            final progress = total > 0 ? finished / total : 0.0;
+                            return ListTile(
+                              leading: const Icon(Icons.person),
+                              title: InkWell(
+                                borderRadius: BorderRadius.circular(4),
+                                onTap: () => _openMiniaturesScreen(unit),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
                                   ),
-                                ),
-                                const SizedBox(height: 4),
-                                // Totales alineados a la derecha con margen
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 4),
-                                  child: Row(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      const Spacer(),
-                                      Text(
-                                        '$finished de $total (${(progress * 100).toInt()}%)',
-                                        style: const TextStyle(fontSize: 12),
+                                      Text(unit.name),
+                                      const SizedBox(height: 6),
+                                      LinearProgressIndicator(
+                                        value: progress,
+                                        minHeight: 6,
+                                        backgroundColor: Colors.grey[300],
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                              getProgressColor(progress),
+                                            ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          right: 4,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            const Spacer(),
+                                            Text(
+                                              '$finished de $total (${(progress * 100).toInt()}%)',
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () => _openUnitEditor(unit: unit),
+                              ),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () => _openUnitEditor(unit: unit),
+                              ),
+                            );
+                          }).toList(),
                         ),
                       );
                     }).toList(),
                   ),
-                );
-              }).toList(),
+                ),
+              ],
             ),
       floatingActionButton: Stack(
         children: [
