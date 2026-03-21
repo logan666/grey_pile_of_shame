@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:grey_pile_of_shame/database/repository/army_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/game_repository.dart';
-import 'package:grey_pile_of_shame/database/repository/unit_repository.dart';
-import 'package:grey_pile_of_shame/models/game.dart';
 import 'package:grey_pile_of_shame/screens/edit/army_edit_screen.dart'
     show ArmyEditScreen;
 import 'package:grey_pile_of_shame/screens/edit/game_edit_screen.dart';
 import 'package:grey_pile_of_shame/screens/settings/settings_screen.dart';
 import 'package:grey_pile_of_shame/screens/list/unit_screen.dart';
 import '../../models/army.dart';
+import '../../models/game.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,7 +19,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final gameRepository = GameRepository();
   final armyRepository = ArmyRepository();
-  final unitRepository = UnitRepository();
   List<Game> games = [];
   Map<int, List<Army>> armiesByGame = {};
   bool isFabOpen = false;
@@ -32,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> loadData() async {
+    // Traer todos los juegos visibles
     final loadedGames = await gameRepository.getGames();
 
     Map<int, List<Army>> map = {};
@@ -39,12 +38,21 @@ class _HomeScreenState extends State<HomeScreen> {
     for (var game in loadedGames) {
       if (game.id == null) continue;
 
-      final armies = await armyRepository.getArmiesByGame(game.id!);
-      map[game.id!] = armies;
+      // Traer solo ejércitos visibles de este juego
+      final armies = await armyRepository.getVisibleArmiesByGame(game.id!);
+
+      if (armies.isNotEmpty) {
+        map[game.id!] = armies;
+      }
     }
 
+    // Filtrar juegos que tengan al menos un ejército visible
+    final filteredGames = loadedGames
+        .where((g) => map.containsKey(g.id!))
+        .toList();
+
     setState(() {
-      games = loadedGames;
+      games = filteredGames;
       armiesByGame = map;
     });
   }
@@ -72,52 +80,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: games.isEmpty
-          ? const Center(child: Text('No hay juegos todavía'))
+          ? const Center(child: Text('No hay juegos con ejércitos visibles'))
           : ListView(
               children: games.map((game) {
                 final armies = armiesByGame[game.id] ?? [];
 
                 return ExpansionTile(
                   key: Key(game.id.toString()),
-
-                  leading: armies.isEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () async {
-                            final confirm = await showDialog<bool>(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text('Eliminar juego'),
-                                content: Text(
-                                  '¿Seguro que quieres borrar "${game.name}"?',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, false),
-                                    child: const Text('Cancelar'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, true),
-                                    child: const Text('Eliminar'),
-                                  ),
-                                ],
-                              ),
-                            );
-
-                            if (confirm ?? false) {
-                              await deleteGame(game.id!);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('${game.name} eliminado'),
-                                ),
-                              );
-                              await loadData();
-                            }
-                          },
-                        )
-                      : null,
                   title: Text(
                     game.name,
                     style: const TextStyle(
@@ -137,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             MaterialPageRoute(
                               builder: (_) => UnitScreen(army: army),
                             ),
-                          ).then((_) => loadData()); // refresca al volver
+                          ).then((_) => loadData());
                         },
                       ),
                     );
@@ -145,63 +114,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               }).toList(),
             ),
-
-      floatingActionButton: Stack(
-        children: [
-          // Botón crear Ejército
-          if (isFabOpen)
-            Positioned(
-              bottom: 100,
-              right: 16,
-              width: 160,
-              child: FloatingActionButton.extended(
-                heroTag: 'army',
-                onPressed: () {
-                  setState(() => isFabOpen = false);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const ArmyEditScreen()),
-                  ).then((_) => loadData());
-                },
-                icon: const Icon(Icons.shield),
-                label: const Text('Ejército'),
-              ),
-            ),
-
-          // Botón crear Juego
-          if (isFabOpen)
-            Positioned(
-              bottom: 180,
-              right: 16,
-              width: 160,
-              child: FloatingActionButton.extended(
-                heroTag: 'game',
-                onPressed: () {
-                  setState(() => isFabOpen = false);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const GameEditScreen()),
-                  ).then((_) => loadData());
-                },
-                icon: const Icon(Icons.inventory),
-                label: const Text('Juego'),
-              ),
-            ),
-
-          // Botón principal
-          Positioned(
-            bottom: 16,
-            right: 16,
-            child: FloatingActionButton(
-              heroTag: 'main',
-              onPressed: () {
-                setState(() => isFabOpen = !isFabOpen);
-              },
-              child: Icon(isFabOpen ? Icons.close : Icons.add),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -12,12 +12,12 @@ class ArmyRepository {
     return _armyDao.getAllArmies();
   }
 
-  Future<int> insertArmy(Map<String, dynamic> armyMap) async {
-    return _armyDao.insertArmy(armyMap);
+  Future<int> insertArmy(Army army) async {
+    return _armyDao.insertArmy(army);
   }
 
-  Future<int> updateArmy(int id, Map<String, dynamic> values) async {
-    return _armyDao.updateArmy(id, values);
+  Future<void> updateArmy(Army army) async {
+    return _armyDao.updateArmy(army);
   }
 
   Future<int> deleteArmy(int id) async {
@@ -26,5 +26,9 @@ class ArmyRepository {
 
   Future<bool> hasUnits(int armyId) async {
     return await _armyDao.hasUnits(armyId);
+  }
+
+  Future<List<Army>> getVisibleArmiesByGame(int gameId) async {
+    return _armyDao.getVisibleArmiesByGame(gameId);
   }
 }

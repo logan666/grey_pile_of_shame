@@ -34,14 +34,14 @@ class _ArmyEditScreenState extends State<ArmyEditScreen> {
   }
 
   void saveArmy() async {
-    if (_formKey.currentState!.validate() && selectedGame != null) {
+    /*if (_formKey.currentState!.validate() && selectedGame != null) {
       final armyMap = {
         'name': _nameController.text,
         'game_id': selectedGame!.id,
       };
       await armyRepository.insertArmy(armyMap);
       Navigator.pop(context, true);
-    }
+    }*/
   }
 
   @override

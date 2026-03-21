@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:grey_pile_of_shame/database/dao/army_dao.dart';
 import 'package:grey_pile_of_shame/database/dao/parametric_dao.dart';
+import 'package:grey_pile_of_shame/database/repository/army_category_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/unit_repository.dart';
+import 'package:grey_pile_of_shame/models/army_category.dart';
 import 'package:grey_pile_of_shame/models/unit.dart';
 import 'package:grey_pile_of_shame/models/army.dart';
 
@@ -30,7 +32,7 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
   DateTime? purchasedAt;
 
   List<Army> armies = [];
-  List<Map<String, dynamic>> roles = [];
+  List<ArmyCategory> roles = [];
   List<Map<String, dynamic>> paintingStatuses = [];
 
   bool isLoading = true;
@@ -38,6 +40,7 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
   final armyDao = ArmyDao();
   final paramDao = ParametricDao();
   final unitRepository = UnitRepository();
+  final categoryRepository = ArmyCategoryRepository();
 
   @override
   void initState() {
@@ -49,8 +52,7 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
     // Cargar ejércitos
     armies = await armyDao.getAllArmies();
 
-    // Cargar roles y estados de pintado
-    roles = await paramDao.getRoles();
+    // Cargar estados de pintado
     paintingStatuses = await paramDao.getPaintingStatuses();
 
     // Si editando, precargar datos
@@ -81,6 +83,8 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
           ? paintingStatuses.first['id']
           : null;
     }
+
+    roles = await categoryRepository.getCategoriesByGame(selectedArmy!.gameId!);
 
     setState(() {
       isLoading = false;
@@ -211,16 +215,13 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
               // Rol de batalla obligatorio, con "Seleccione..." por defecto
               DropdownButtonFormField<int>(
                 value: selectedRoleId,
-                decoration: const InputDecoration(labelText: 'Rol de batalla'),
+                decoration: const InputDecoration(labelText: 'Categoría'),
                 hint: const Text(
-                  'Seleccione un rol...',
+                  'Seleccione...',
                 ), // Esto aparece si no hay valor
                 items: roles
                     .map(
-                      (r) => DropdownMenuItem(
-                        value: r['id'] as int,
-                        child: Text(r['name']),
-                      ),
+                      (r) => DropdownMenuItem(value: r.id, child: Text(r.name)),
                     )
                     .toList(),
                 onChanged: (v) => setState(() => selectedRoleId = v),

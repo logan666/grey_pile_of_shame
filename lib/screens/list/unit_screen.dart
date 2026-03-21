@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:grey_pile_of_shame/database/repository/army_category_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/army_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/parametric_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/unit_repository.dart';
+import 'package:grey_pile_of_shame/models/army_category.dart';
 import 'package:grey_pile_of_shame/models/unit.dart';
 import 'package:grey_pile_of_shame/models/army.dart';
 import 'package:grey_pile_of_shame/screens/edit/unit_edit_screen.dart';
 import 'package:grey_pile_of_shame/screens/list/miniature_screen.dart';
+import 'package:grey_pile_of_shame/utils/icon_mapping.dart';
 
 class UnitScreen extends StatefulWidget {
   final Army army;
@@ -18,24 +21,30 @@ class UnitScreen extends StatefulWidget {
 class _UnitScreenState extends State<UnitScreen> {
   final unitRepository = UnitRepository();
   final armyRepository = ArmyRepository();
+  final categoryRepository = ArmyCategoryRepository();
   final parametricRepository = ParametricRepository();
 
   List<Unit> units = [];
-  List<Map<String, dynamic>> roles = [];
-  Map<int, String> roleNames = {};
-  Map<int, String> roleCodes = {};
+
+  List<ArmyCategory> categories = [];
+  Map<int, String> categoryNames = {};
+  Map<int, String> categoryIcons = {};
+
   Map<int, Map<String, int>> unitProgress = {}; // finished + total
 
   @override
   void initState() {
     super.initState();
-    _loadRoles().then((_) => loadUnits());
+    _loadCategories().then((_) => loadUnits());
   }
 
-  Future<void> _loadRoles() async {
-    roles = await parametricRepository.getRoles();
-    roleNames = {for (var r in roles) r['id'] as int: r['name'] as String};
-    roleCodes = {for (var r in roles) r['id'] as int: r['code'] as String};
+  Future<void> _loadCategories() async {
+    categories = await categoryRepository.getCategoriesByGame(
+      widget.army.gameId!,
+    );
+
+    categoryNames = {for (var c in categories) c.id!: c.name};
+    categoryIcons = {for (var c in categories) c.id!: c.icon ?? 'default'};
   }
 
   Future<void> loadUnits() async {
@@ -143,12 +152,19 @@ class _UnitScreenState extends State<UnitScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Agrupar unidades por rol
-    Map<String, List<Unit>> unitsByRole = {};
+    Map<ArmyCategory, List<Unit>> unitsByCategory = {};
     for (var unit in units) {
-      final roleName = roleNames[unit.roleId ?? 0] ?? 'Sin rol';
-      unitsByRole.putIfAbsent(roleName, () => []);
-      unitsByRole[roleName]!.add(unit);
+      final category = categories.firstWhere(
+        (c) => c.id == unit.roleId, // roleId ahora apunta a categoryId
+        orElse: () => ArmyCategory(
+          id: 0,
+          gameId: widget.army.gameId!,
+          name: 'Sin categoría',
+          icon: 'default',
+        ),
+      );
+      unitsByCategory.putIfAbsent(category, () => []);
+      unitsByCategory[category]!.add(unit);
     }
 
     return Scaffold(
@@ -193,9 +209,9 @@ class _UnitScreenState extends State<UnitScreen> {
                 // Lista de unidades por rol
                 Expanded(
                   child: ListView(
-                    children: unitsByRole.entries.map((entry) {
-                      final roleName = entry.key;
-                      final roleUnits = entry.value;
+                    children: unitsByCategory.entries.map((entry) {
+                      final category = entry.key;
+                      final categoryUnits = entry.value;
                       return Container(
                         margin: const EdgeInsets.symmetric(
                           horizontal: 8,
@@ -205,20 +221,20 @@ class _UnitScreenState extends State<UnitScreen> {
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: ExpansionTile(
-                          leading: Image.asset(
-                            'assets/icons/rol/${roleCodes.entries.firstWhere((e) => roleNames[e.key] == roleName, orElse: () => MapEntry(0, 'default')).value}.png',
-                            width: 28,
-                            height: 28,
-                            fit: BoxFit.contain,
+                          leading: Icon(
+                            iconMapping[category.icon ?? 'default'] ??
+                                Icons.shield,
+                            size: 28,
+                            color: Colors.blueGrey, // opcional
                           ),
                           title: Text(
-                            roleName,
+                            category.name,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
                           ),
-                          children: roleUnits.map((unit) {
+                          children: categoryUnits.map((unit) {
                             final finished =
                                 unitProgress[unit.id!]?['finished'] ?? 0;
                             final total = unitProgress[unit.id!]?['total'] ?? 0;
@@ -292,17 +308,6 @@ class _UnitScreenState extends State<UnitScreen> {
               child: const Icon(Icons.add),
             ),
           ),
-          // Botón rojo solo si no hay unidades
-          if (units.isEmpty)
-            Positioned(
-              bottom: 90,
-              right: 16,
-              child: FloatingActionButton(
-                backgroundColor: Colors.red,
-                onPressed: _deleteArmy,
-                child: const Icon(Icons.delete),
-              ),
-            ),
         ],
       ),
     );

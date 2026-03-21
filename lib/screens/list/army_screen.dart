@@ -35,7 +35,7 @@ class _ArmiesScreenState extends State<ArmiesScreen> {
       gameId: widget.game.id!,
       name: 'Nuevo Ejército',
     );
-    await armyRepository.insertArmy(newArmy.toMap());
+    await armyRepository.insertArmy(newArmy);
     await loadArmies();
   }
 

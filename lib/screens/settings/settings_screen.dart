@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:grey_pile_of_shame/screens/edit/game_edit_screen.dart';
+import 'package:grey_pile_of_shame/screens/settings/army_settings.dart';
+import 'package:grey_pile_of_shame/screens/settings/category_settings.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -11,13 +12,13 @@ class SettingsScreen extends StatelessWidget {
       body: ListView(
         children: [
           ListTile(
-            leading: const Icon(Icons.videogame_asset),
-            title: const Text('Editar juegos'),
-            subtitle: const Text('Cambiar nombre o eliminar juegos'),
+            leading: const Icon(Icons.shield),
+            title: const Text('Ejércitos'),
+            subtitle: const Text('Mostrar u ocultar ejércitos'),
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const GameEditScreen()),
+                MaterialPageRoute(builder: (_) => ArmiesSettingsPage()),
               );
             },
           ),
@@ -29,7 +30,10 @@ class SettingsScreen extends StatelessWidget {
             title: const Text('Categorías'),
             subtitle: const Text('Gestionar categorías de unidades'),
             onTap: () {
-              // futura pantalla de categorías
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => CategorySettingsScreen()),
+              );
             },
           ),
         ],

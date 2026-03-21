@@ -25,14 +25,19 @@ class ArmyDao {
     return maps.map((m) => Army.fromMap(m)).toList();
   }
 
-  Future<int> insertArmy(Map<String, dynamic> armyMap) async {
+  Future<int> insertArmy(Army army) async {
     final db = await dbHelper.database;
-    return await db.insert('armies', armyMap);
+    return await db.insert('armies', army.toMap());
   }
 
-  Future<int> updateArmy(int id, Map<String, dynamic> values) async {
+  Future<void> updateArmy(Army army) async {
     final db = await dbHelper.database;
-    return await db.update('armies', values, where: 'id = ?', whereArgs: [id]);
+    await db.update(
+      'armies',
+      army.toMap(),
+      where: 'id = ?',
+      whereArgs: [army.id],
+    );
   }
 
   Future<int> deleteArmy(int id) async {
@@ -51,5 +56,17 @@ class ArmyDao {
 
     final count = Sqflite.firstIntValue(result) ?? 0;
     return count > 0;
+  }
+
+  Future<List<Army>> getVisibleArmiesByGame(int gameId) async {
+    final db = await dbHelper.database;
+
+    final maps = await db.query(
+      'armies',
+      where: 'game_id = ? AND visible = ?',
+      whereArgs: [gameId, 1], // 1 = true
+    );
+
+    return maps.map((m) => Army.fromMap(m)).toList();
   }
 }
