@@ -20,4 +20,14 @@ class GameDao {
     final db = await dbHelper.database;
     return await db.delete('games', where: 'id = ?', whereArgs: [id]);
   }
+
+  Future<void> updateGame(Game game) async {
+    final db = await dbHelper.database;
+    await db.update(
+      'games',
+      game.toMap(),
+      where: 'id = ?',
+      whereArgs: [game.id],
+    );
+  }
 }

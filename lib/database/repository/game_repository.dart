@@ -15,4 +15,8 @@ class GameRepository {
   Future<int> deleteGame(int id) async {
     return _gameDao.deleteGame(id);
   }
+
+  Future<void> updateGame(Game game) async {
+    return _gameDao.updateGame(game);
+  }
 }
