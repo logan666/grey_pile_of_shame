@@ -6,6 +6,7 @@ import 'package:grey_pile_of_shame/models/game.dart';
 import 'package:grey_pile_of_shame/screens/edit/army_edit_screen.dart'
     show ArmyEditScreen;
 import 'package:grey_pile_of_shame/screens/edit/game_edit_screen.dart';
+import 'package:grey_pile_of_shame/screens/settings/settings_screen.dart';
 import 'package:grey_pile_of_shame/screens/list/unit_screen.dart';
 import '../../models/army.dart';
 
@@ -56,7 +57,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Grey Pile of Shame')),
+      appBar: AppBar(
+        title: const Text('Grey Pile of Shame'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              ).then((_) => loadData()); // refresca al volver
+            },
+          ),
+        ],
+      ),
       body: games.isEmpty
           ? const Center(child: Text('No hay juegos todavía'))
           : ListView(
@@ -169,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     MaterialPageRoute(builder: (_) => const GameEditScreen()),
                   ).then((_) => loadData());
                 },
-                icon: const Icon(Icons.videogame_asset),
+                icon: const Icon(Icons.inventory),
                 label: const Text('Juego'),
               ),
             ),

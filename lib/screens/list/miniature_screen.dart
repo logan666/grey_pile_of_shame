@@ -271,29 +271,45 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
           final statusColor = _hexToColor(status['color']);
           final statusName = status['name'];
 
-          return Container(
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            child: GestureDetector(
-              onTap: () => _changeStatus(mini), // Abrir selección de estado
+          return GestureDetector(
+            onTap: () => _changeStatus(mini), // acción al pulsar
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              height: 90,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.black, width: 2),
+              ),
               child: Stack(
                 children: [
-                  // Botón cuadrado con imagen
-                  Container(
-                    height: 90,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      image: const DecorationImage(
-                        image: AssetImage(
-                          'assets/images/marine.png',
-                        ), // Imagen del marine
-                        fit: BoxFit.cover,
+                  // Imagen a la derecha usando DecorationImage
+                  Positioned(
+                    top: 0,
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      width: 220,
+                      height: 90,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(8),
+                          bottomRight: Radius.circular(8),
+                        ),
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/marine.png'),
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                            Colors.black.withOpacity(1),
+                            BlendMode.dstATop,
+                          ),
+                        ),
                       ),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.black),
                     ),
                   ),
 
-                  // Círculo de color en la esquina superior izquierda
+                  // Círculo de color
                   Positioned(
                     top: 8,
                     left: 8,
@@ -310,16 +326,20 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
                           ),
                         ),
                         if (_isFinishedStatus(status['id']))
-                          Icon(Icons.check, size: 18, color: Colors.white),
+                          const Icon(
+                            Icons.check,
+                            size: 18,
+                            color: Colors.white,
+                          ),
                       ],
                     ),
                   ),
 
-                  // Texto de descripción y estado debajo de la imagen
+                  // Texto
                   Positioned(
                     bottom: 8,
-                    left: 8,
-                    right: 8,
+                    left: 12,
+                    right: 100,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -329,19 +349,13 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
                             color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            shadows: [
-                              Shadow(blurRadius: 1, color: Colors.black),
-                            ],
                           ),
                         ),
                         Text(
                           statusName,
                           style: const TextStyle(
                             color: Colors.black,
-                            fontSize: 16,
-                            shadows: [
-                              Shadow(blurRadius: 1, color: Colors.black),
-                            ],
+                            fontSize: 14,
                           ),
                         ),
                       ],
