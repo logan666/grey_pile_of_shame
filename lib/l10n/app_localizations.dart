@@ -472,30 +472,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to delete \"{name}\"?'**
   String deleteUnitConfirm(Object name);
-
-  /// No description provided for @newGameSystem.
-  ///
-  /// In en, this message translates to:
-  /// **'Nuevo Sistema de Juego'**
-  String get newGameSystem;
-
-  /// No description provided for @gameSystemName.
-  ///
-  /// In en, this message translates to:
-  /// **'Nombre del sistema de juego'**
-  String get gameSystemName;
-
-  /// No description provided for @gameNameRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'El nombre no puede estar vacío'**
-  String get gameNameRequired;
-
-  /// No description provided for @gameSavedSuccessfully.
-  ///
-  /// In en, this message translates to:
-  /// **'Juego guardado correctamente'**
-  String get gameSavedSuccessfully;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

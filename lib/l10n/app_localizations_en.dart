@@ -210,16 +210,4 @@ class AppLocalizationsEn extends AppLocalizations {
   String deleteUnitConfirm(Object name) {
     return 'Are you sure you want to delete \"$name\"?';
   }
-
-  @override
-  String get newGameSystem => 'Nuevo Sistema de Juego';
-
-  @override
-  String get gameSystemName => 'Nombre del sistema de juego';
-
-  @override
-  String get gameNameRequired => 'El nombre no puede estar vacío';
-
-  @override
-  String get gameSavedSuccessfully => 'Juego guardado correctamente';
 }
