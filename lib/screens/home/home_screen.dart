@@ -139,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(4),
                                     child: Image.asset(
-                                      'assets/images/logos/${armyLogoMapping[army.name]}',
+                                      'assets/images/logos/${armyImageMapping[army.name]}',
                                       width: 40,
                                       height: 40,
                                       fit: BoxFit.fitWidth,

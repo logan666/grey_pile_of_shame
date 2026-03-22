@@ -186,16 +186,10 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
           key: _formKey,
           child: ListView(
             children: [
-              // Ejército (ya obligatorio si quieres, pero lo dejamos opcional)
-              DropdownButtonFormField<Army>(
-                value: selectedArmy,
+              TextFormField(
+                initialValue: selectedArmy?.name ?? '',
                 decoration: const InputDecoration(labelText: 'Ejército'),
-                items: armies
-                    .map((a) => DropdownMenuItem(value: a, child: Text(a.name)))
-                    .toList(),
-                onChanged: (value) => setState(() => selectedArmy = value),
-                validator: (v) =>
-                    v == null ? 'Debe seleccionar un ejército' : null,
+                enabled: false,
               ),
               const SizedBox(height: 16),
 

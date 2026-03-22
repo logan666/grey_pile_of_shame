@@ -143,7 +143,7 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
     final nameController = TextEditingController(text: army?.name ?? '');
 
     String? selectedImage = army?.image ?? armyImageMapping.values.first;
-    String? selectedLogo = army?.image ?? armyLogoMapping.values.first;
+    String? selectedLogo = army?.image ?? armyImageMapping.values.first;
 
     final result = await showDialog<bool>(
       context: context,
