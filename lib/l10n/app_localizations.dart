@@ -131,6 +131,12 @@ abstract class AppLocalizations {
   /// **'Add'**
   String get add;
 
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
   /// No description provided for @appBarTitle.
   ///
   /// In en, this message translates to:
@@ -166,12 +172,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Do you want to delete the game \"{gameName}\" and all its armies?'**
   String confirmDeleteGameContent(Object gameName);
-
-  /// No description provided for @delete.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete'**
-  String get delete;
 
   /// No description provided for @newArmy.
   ///
@@ -226,6 +226,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Do you want to delete the army \"{armyName}\"?'**
   String confirmDeleteArmyContent(Object armyName);
+
+  /// No description provided for @categorySettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Category Settings'**
+  String get categorySettingsTitle;
+
+  /// No description provided for @newCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'New Category'**
+  String get newCategory;
+
+  /// No description provided for @editCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Category'**
+  String get editCategory;
+
+  /// No description provided for @deleteCategoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Category'**
+  String get deleteCategoryTitle;
+
+  /// No description provided for @deleteCategoryContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete \"{categoryName}\"?'**
+  String deleteCategoryContent(Object categoryName);
+
+  /// No description provided for @categoryNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get categoryNameLabel;
+
+  /// No description provided for @categoryIconLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Icon'**
+  String get categoryIconLabel;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// No description provided for @armiesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Armies'**
+  String get armiesTitle;
+
+  /// No description provided for @armiesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show or hide armies'**
+  String get armiesSubtitle;
+
+  /// No description provided for @categoriesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get categoriesTitle;
+
+  /// No description provided for @categoriesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage unit categories'**
+  String get categoriesSubtitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grey_pile_of_shame/l10n/app_localizations.dart';
 import 'package:grey_pile_of_shame/screens/settings/army_settings.dart';
 import 'package:grey_pile_of_shame/screens/settings/category_settings.dart';
 
@@ -8,13 +9,13 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Configuración')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.settingsTitle)),
       body: ListView(
         children: [
           ListTile(
             leading: const Icon(Icons.shield),
-            title: const Text('Ejércitos'),
-            subtitle: const Text('Mostrar u ocultar ejércitos'),
+            title: Text(AppLocalizations.of(context)!.armiesTitle),
+            subtitle: Text(AppLocalizations.of(context)!.armiesSubtitle),
             onTap: () {
               Navigator.push(
                 context,
@@ -27,8 +28,8 @@ class SettingsScreen extends StatelessWidget {
 
           ListTile(
             leading: const Icon(Icons.category),
-            title: const Text('Categorías'),
-            subtitle: const Text('Gestionar categorías de unidades'),
+            title: Text(AppLocalizations.of(context)!.categoriesTitle),
+            subtitle: Text(AppLocalizations.of(context)!.categoriesSubtitle),
             onTap: () {
               Navigator.push(
                 context,

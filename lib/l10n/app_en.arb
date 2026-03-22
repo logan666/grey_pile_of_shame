@@ -3,9 +3,12 @@
     "appTitle": "Grey Pile of Shame",
     "welcome": "Welcome!",
     "noGamesVisible": "There are no games with visible armies.",
+
     "cancel": "Cancel", 
     "save": "Save",
     "add": "Add",
+    "delete": "Delete",
+
     "appBarTitle": "Games and Armies",
     "newGame": "New Game",
     "editGame": "Edit Game",
@@ -25,5 +28,19 @@
     "saveArmy": "Save",
     "confirmDeleteArmyTitle": "Delete Confirmation",
     "confirmDeleteArmyContent": "Do you want to delete the army \"{armyName}\"?",
-    "noGamesVisible": "There are no games with visible armies"
+    "noGamesVisible": "There are no games with visible armies",
+
+    "categorySettingsTitle": "Category Settings",
+    "newCategory": "New Category",
+    "editCategory": "Edit Category",
+    "deleteCategoryTitle": "Delete Category",
+    "deleteCategoryContent": "Are you sure you want to delete \"{categoryName}\"?",
+    "categoryNameLabel": "Name",
+    "categoryIconLabel": "Icon",
+
+    "settingsTitle": "Settings",
+    "armiesTitle": "Armies",
+    "armiesSubtitle": "Show or hide armies",
+    "categoriesTitle": "Categories",
+    "categoriesSubtitle": "Manage unit categories"
 }

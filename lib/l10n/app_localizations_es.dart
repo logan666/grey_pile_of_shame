@@ -27,6 +27,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get add => 'Agregar';
 
   @override
+  String get delete => 'Borrar';
+
+  @override
   String get appBarTitle => 'Juegos y Ejércitos';
 
   @override
@@ -45,9 +48,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String confirmDeleteGameContent(Object gameName) {
     return '¿Deseas borrar el juego \"$gameName\" y todos sus ejércitos?';
   }
-
-  @override
-  String get delete => 'Borrar';
 
   @override
   String get newArmy => 'Nuevo ejército';
@@ -77,4 +77,42 @@ class AppLocalizationsEs extends AppLocalizations {
   String confirmDeleteArmyContent(Object armyName) {
     return '¿Deseas borrar el ejército \"$armyName\"?';
   }
+
+  @override
+  String get categorySettingsTitle => 'Category Settings';
+
+  @override
+  String get newCategory => 'New Category';
+
+  @override
+  String get editCategory => 'Edit Category';
+
+  @override
+  String get deleteCategoryTitle => 'Delete Category';
+
+  @override
+  String deleteCategoryContent(Object categoryName) {
+    return 'Are you sure you want to delete \"$categoryName\"?';
+  }
+
+  @override
+  String get categoryNameLabel => 'Name';
+
+  @override
+  String get categoryIconLabel => 'Icon';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get armiesTitle => 'Armies';
+
+  @override
+  String get armiesSubtitle => 'Show or hide armies';
+
+  @override
+  String get categoriesTitle => 'Categories';
+
+  @override
+  String get categoriesSubtitle => 'Manage unit categories';
 }

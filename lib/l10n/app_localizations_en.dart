@@ -27,6 +27,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get add => 'Add';
 
   @override
+  String get delete => 'Delete';
+
+  @override
   String get appBarTitle => 'Games and Armies';
 
   @override
@@ -45,9 +48,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String confirmDeleteGameContent(Object gameName) {
     return 'Do you want to delete the game \"$gameName\" and all its armies?';
   }
-
-  @override
-  String get delete => 'Delete';
 
   @override
   String get newArmy => 'New Army';
@@ -77,4 +77,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String confirmDeleteArmyContent(Object armyName) {
     return 'Do you want to delete the army \"$armyName\"?';
   }
+
+  @override
+  String get categorySettingsTitle => 'Category Settings';
+
+  @override
+  String get newCategory => 'New Category';
+
+  @override
+  String get editCategory => 'Edit Category';
+
+  @override
+  String get deleteCategoryTitle => 'Delete Category';
+
+  @override
+  String deleteCategoryContent(Object categoryName) {
+    return 'Are you sure you want to delete \"$categoryName\"?';
+  }
+
+  @override
+  String get categoryNameLabel => 'Name';
+
+  @override
+  String get categoryIconLabel => 'Icon';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get armiesTitle => 'Armies';
+
+  @override
+  String get armiesSubtitle => 'Show or hide armies';
+
+  @override
+  String get categoriesTitle => 'Categories';
+
+  @override
+  String get categoriesSubtitle => 'Manage unit categories';
 }

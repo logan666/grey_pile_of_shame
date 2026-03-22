@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grey_pile_of_shame/database/repository/army_category_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/game_repository.dart';
+import 'package:grey_pile_of_shame/l10n/app_localizations.dart';
 import 'package:grey_pile_of_shame/models/army_category.dart';
 import 'package:grey_pile_of_shame/models/game.dart';
 import 'package:grey_pile_of_shame/utils/icon_mapping.dart';
@@ -47,16 +48,20 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Nueva Categoría'),
+        title: Text(AppLocalizations.of(context)!.newCategory),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
-              decoration: InputDecoration(labelText: 'Nombre'),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.categoryNameLabel,
+              ),
               onChanged: (v) => newName = v,
             ),
             TextField(
-              decoration: InputDecoration(labelText: 'Icono'),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.categoryIconLabel,
+              ),
               onChanged: (v) => newIcon = v,
             ),
           ],
@@ -64,7 +69,7 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -78,7 +83,7 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
               await _loadData();
               Navigator.pop(context);
             },
-            child: Text('Añadir'),
+            child: Text(AppLocalizations.of(context)!.add),
           ),
         ],
       ),
@@ -91,17 +96,21 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Editar Categoría'),
+        title: Text(AppLocalizations.of(context)!.editCategory),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
-              decoration: InputDecoration(labelText: 'Nombre'),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.categoryNameLabel,
+              ),
               controller: TextEditingController(text: updatedName),
               onChanged: (v) => updatedName = v,
             ),
             TextField(
-              decoration: InputDecoration(labelText: 'Icono'),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.categoryIconLabel,
+              ),
               controller: TextEditingController(text: updatedIcon),
               onChanged: (v) => updatedIcon = v,
             ),
@@ -110,7 +119,7 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancelar'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -125,7 +134,7 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
               await _loadData();
               Navigator.pop(context);
             },
-            child: Text('Save'),
+            child: Text(AppLocalizations.of(context)!.save),
           ),
         ],
       ),
@@ -136,12 +145,14 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Eliminar Categoría'),
-        content: Text('¿Estas seguro de eliminar "${cat.name}"?'),
+        title: Text(AppLocalizations.of(context)!.deleteCategoryTitle),
+        content: Text(
+          AppLocalizations.of(context)!.deleteCategoryContent(cat.name),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancelar'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -149,7 +160,7 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
               await _loadData();
               Navigator.pop(context);
             },
-            child: Text('Eliminar'),
+            child: Text(AppLocalizations.of(context)!.delete),
           ),
         ],
       ),
@@ -161,7 +172,9 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
     if (loading) return Center(child: CircularProgressIndicator());
 
     return Scaffold(
-      appBar: AppBar(title: Text('Configuración de Categorías')),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.categorySettingsTitle),
+      ),
       body: ListView(
         children: games.map((game) {
           final cats = categoriesByGame[game.id] ?? [];
@@ -205,7 +218,7 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
               ),
               ListTile(
                 leading: Icon(Icons.add),
-                title: Text('Nueva Categoría'),
+                title: Text(AppLocalizations.of(context)!.newCategory),
                 onTap: () => _addCategory(game.id!),
               ),
             ],
