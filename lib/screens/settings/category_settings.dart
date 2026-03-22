@@ -47,16 +47,16 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Add Category'),
+        title: Text('Nueva Categoría'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: InputDecoration(labelText: 'Nombre'),
               onChanged: (v) => newName = v,
             ),
             TextField(
-              decoration: InputDecoration(labelText: 'Icon (optional)'),
+              decoration: InputDecoration(labelText: 'Icono'),
               onChanged: (v) => newIcon = v,
             ),
           ],
@@ -78,7 +78,7 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
               await _loadData();
               Navigator.pop(context);
             },
-            child: Text('Add'),
+            child: Text('Añadir'),
           ),
         ],
       ),
@@ -91,17 +91,17 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Edit Category'),
+        title: Text('Editar Categoría'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: InputDecoration(labelText: 'Nombre'),
               controller: TextEditingController(text: updatedName),
               onChanged: (v) => updatedName = v,
             ),
             TextField(
-              decoration: InputDecoration(labelText: 'Icon (optional)'),
+              decoration: InputDecoration(labelText: 'Icono'),
               controller: TextEditingController(text: updatedIcon),
               onChanged: (v) => updatedIcon = v,
             ),
@@ -110,7 +110,7 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
+            child: Text('Cancelar'),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -136,12 +136,12 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Delete Category'),
-        content: Text('Are you sure you want to delete "${cat.name}"?'),
+        title: Text('Eliminar Categoría'),
+        content: Text('¿Estas seguro de eliminar "${cat.name}"?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
+            child: Text('Cancelar'),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -149,7 +149,7 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
               await _loadData();
               Navigator.pop(context);
             },
-            child: Text('Delete'),
+            child: Text('Eliminar'),
           ),
         ],
       ),
@@ -161,7 +161,7 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
     if (loading) return Center(child: CircularProgressIndicator());
 
     return Scaffold(
-      appBar: AppBar(title: Text('Categories Settings')),
+      appBar: AppBar(title: Text('Configuración de Categorías')),
       body: ListView(
         children: games.map((game) {
           final cats = categoriesByGame[game.id] ?? [];
@@ -205,7 +205,7 @@ class _CategorySettingsScreenState extends State<CategorySettingsScreen> {
               ),
               ListTile(
                 leading: Icon(Icons.add),
-                title: Text('Add Category'),
+                title: Text('Nueva Categoría'),
                 onTap: () => _addCategory(game.id!),
               ),
             ],
