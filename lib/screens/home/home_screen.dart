@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:grey_pile_of_shame/database/repository/army_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/game_repository.dart';
+import 'package:grey_pile_of_shame/database/repository/unit_repository.dart';
 import 'package:grey_pile_of_shame/screens/edit/army_edit_screen.dart'
     show ArmyEditScreen;
 import 'package:grey_pile_of_shame/screens/edit/game_edit_screen.dart';
 import 'package:grey_pile_of_shame/screens/settings/settings_screen.dart';
 import 'package:grey_pile_of_shame/screens/list/unit_screen.dart';
+import 'package:grey_pile_of_shame/utils/progress_bar.dart';
 import '../../models/army.dart';
 import '../../models/game.dart';
 
@@ -19,8 +21,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final gameRepository = GameRepository();
   final armyRepository = ArmyRepository();
+  final unitRepository = UnitRepository();
   List<Game> games = [];
   Map<int, List<Army>> armiesByGame = {};
+  Map<int, Map<String, int>> armyProgress = {};
   bool isFabOpen = false;
 
   @override
@@ -30,23 +34,39 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> loadData() async {
-    // Traer todos los juegos visibles
     final loadedGames = await gameRepository.getGames();
 
     Map<int, List<Army>> map = {};
+    Map<int, Map<String, int>> progressMap = {};
 
     for (var game in loadedGames) {
       if (game.id == null) continue;
 
-      // Traer solo ejércitos visibles de este juego
       final armies = await armyRepository.getVisibleArmiesByGame(game.id!);
 
       if (armies.isNotEmpty) {
         map[game.id!] = armies;
+
+        for (var army in armies) {
+          final units = await unitRepository.getUnits(army.id!);
+
+          int totalFinished = 0;
+          int totalMiniatures = 0;
+
+          for (var unit in units) {
+            final stats = await unitRepository.getMiniatureStats(unit.id!);
+            totalFinished += stats['finished'] ?? 0;
+            totalMiniatures += stats['total'] ?? 0;
+          }
+
+          progressMap[army.id!] = {
+            'finished': totalFinished,
+            'total': totalMiniatures,
+          };
+        }
       }
     }
 
-    // Filtrar juegos que tengan al menos un ejército visible
     final filteredGames = loadedGames
         .where((g) => map.containsKey(g.id!))
         .toList();
@@ -54,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       games = filteredGames;
       armiesByGame = map;
+      armyProgress = progressMap;
     });
   }
 
@@ -96,10 +117,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   children: armies.map((army) {
                     return Padding(
-                      padding: const EdgeInsets.only(left: 40, bottom: 6),
-                      child: ListTile(
-                        leading: const Icon(Icons.shield, size: 18),
-                        title: Text(army.name),
+                      padding: const EdgeInsets.only(
+                        left: 40,
+                        bottom: 10,
+                        right: 16,
+                      ),
+                      child: InkWell(
                         onTap: () {
                           Navigator.push(
                             context,
@@ -108,6 +131,59 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ).then((_) => loadData());
                         },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(Icons.shield, size: 18),
+                                const SizedBox(width: 8),
+                                Text(army.name),
+                              ],
+                            ),
+
+                            const SizedBox(height: 6),
+
+                            Builder(
+                              builder: (_) {
+                                final finished =
+                                    armyProgress[army.id]?['finished'] ?? 0;
+                                final total =
+                                    armyProgress[army.id]?['total'] ?? 0;
+
+                                final progress = total > 0
+                                    ? finished / total
+                                    : 0.0;
+
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    LinearProgressIndicator(
+                                      value: progress,
+                                      minHeight: 6,
+                                      backgroundColor: Colors.grey[300],
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        getProgressColor(progress),
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 2),
+
+                                    Row(
+                                      children: [
+                                        const Spacer(),
+                                        Text(
+                                          '$finished de $total (${(progress * 100).toInt()}%)',
+                                          style: const TextStyle(fontSize: 11),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   }).toList(),

@@ -9,6 +9,7 @@ import 'package:grey_pile_of_shame/models/army.dart';
 import 'package:grey_pile_of_shame/screens/edit/unit_edit_screen.dart';
 import 'package:grey_pile_of_shame/screens/list/miniature_screen.dart';
 import 'package:grey_pile_of_shame/utils/icon_mapping.dart';
+import 'package:grey_pile_of_shame/utils/progress_bar.dart';
 
 class UnitScreen extends StatefulWidget {
   final Army army;
@@ -141,13 +142,6 @@ class _UnitScreenState extends State<UnitScreen> {
         'name': widget.army.name,
       });
     }
-  }
-
-  Color getProgressColor(double value) {
-    if (value < 0.5) return Colors.red;
-    if (value < 0.7) return Colors.orange;
-    if (value < 1) return const Color.fromARGB(255, 105, 176, 209);
-    return Colors.green;
   }
 
   @override
