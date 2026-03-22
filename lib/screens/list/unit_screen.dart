@@ -114,36 +114,6 @@ class _UnitScreenState extends State<UnitScreen> {
     }
   }
 
-  Future<void> _deleteArmy() async {
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Eliminar ejército'),
-        content: Text(
-          'No hay unidades en "${widget.army.name}". ¿Seguro que quieres borrar este ejército?',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Eliminar'),
-          ),
-        ],
-      ),
-    );
-
-    if (confirm ?? false) {
-      await armyRepository.deleteArmy(widget.army.id!);
-      Navigator.pop(context, {
-        'action': 'deletedArmy',
-        'name': widget.army.name,
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     Map<ArmyCategory, List<Unit>> unitsByCategory = {};
