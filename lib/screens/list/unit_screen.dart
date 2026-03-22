@@ -132,7 +132,28 @@ class _UnitScreenState extends State<UnitScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.army.name)),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            if (armyImageMapping.containsKey(widget.army.name))
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: Image.asset(
+                  'assets/images/logos/${armyImageMapping[widget.army.name]}',
+                  width: 28,
+                  height: 28,
+                  fit: BoxFit.contain,
+                ),
+              )
+            else
+              const SizedBox(width: 28, height: 28),
+
+            const SizedBox(width: 8),
+
+            Text(widget.army.name),
+          ],
+        ),
+      ),
       body: units.isEmpty
           ? const Center(child: Text('No hay unidades todavía'))
           : Column(
