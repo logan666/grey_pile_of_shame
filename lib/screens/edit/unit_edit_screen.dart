@@ -3,6 +3,7 @@ import 'package:grey_pile_of_shame/database/dao/army_dao.dart';
 import 'package:grey_pile_of_shame/database/dao/parametric_dao.dart';
 import 'package:grey_pile_of_shame/database/repository/army_category_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/unit_repository.dart';
+import 'package:grey_pile_of_shame/l10n/app_localizations.dart';
 import 'package:grey_pile_of_shame/models/army_category.dart';
 import 'package:grey_pile_of_shame/models/unit.dart';
 import 'package:grey_pile_of_shame/models/army.dart';
@@ -148,16 +149,18 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Eliminar unidad'),
-        content: Text('¿Seguro que quieres borrar "${widget.unit!.name}"?'),
+        title: Text(AppLocalizations.of(context)!.deleteUnitTitle),
+        content: Text(
+          AppLocalizations.of(context)!.deleteUnitConfirm(widget.unit!.name),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Eliminar'),
+            child: Text(AppLocalizations.of(context)!.delete),
           ),
         ],
       ),
@@ -178,7 +181,11 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.unit == null ? 'Nueva Unidad' : 'Editar Unidad'),
+        title: Text(
+          widget.unit == null
+              ? AppLocalizations.of(context)!.newUnit
+              : AppLocalizations.of(context)!.editUnit,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -188,7 +195,9 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
             children: [
               TextFormField(
                 initialValue: selectedArmy?.name ?? '',
-                decoration: const InputDecoration(labelText: 'Ejército'),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.army,
+                ),
                 enabled: false,
               ),
               const SizedBox(height: 16),
@@ -196,10 +205,12 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
               // Nombre obligatorio
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Nombre'),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.name,
+                ),
                 validator: (v) {
                   if (v == null || v.trim().isEmpty) {
-                    return 'Es obligatorio';
+                    return AppLocalizations.of(context)!.requiredField;
                   }
                   return null;
                 },
@@ -209,9 +220,11 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
               // Rol de batalla obligatorio, con "Seleccione..." por defecto
               DropdownButtonFormField<int>(
                 value: selectedRoleId,
-                decoration: const InputDecoration(labelText: 'Categoría'),
-                hint: const Text(
-                  'Seleccione...',
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.category,
+                ),
+                hint: Text(
+                  AppLocalizations.of(context)!.selectOption,
                 ), // Esto aparece si no hay valor
                 items: roles
                     .map(
@@ -219,14 +232,16 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
                     )
                     .toList(),
                 onChanged: (v) => setState(() => selectedRoleId = v),
-                validator: (v) => v == null ? 'Es obligatorio' : null,
+                validator: (v) => v == null
+                    ? AppLocalizations.of(context)!.requiredField
+                    : null,
               ),
               const SizedBox(height: 16),
 
               // Complejidad de pintado (slider) - opcional, no valida
               Row(
                 children: [
-                  const Text('Complejidad de pintado:'),
+                  Text(AppLocalizations.of(context)!.paintingDifficulty),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Slider(
@@ -247,11 +262,13 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
               TextFormField(
                 controller: _pointsController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Puntos'),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.points,
+                ),
                 validator: (v) {
                   if (v == null || v.trim().isEmpty) return null; // opcional
                   if (int.tryParse(v) == null)
-                    return 'Debe de ser un número entero';
+                    return AppLocalizations.of(context)!.integerRequired;
                   return null;
                 },
               ),
@@ -261,11 +278,13 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
               TextFormField(
                 controller: _priceController,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
-                decoration: const InputDecoration(labelText: 'Precio (€)'),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.price,
+                ),
                 validator: (v) {
                   if (v == null || v.trim().isEmpty) return null; // opcional
                   if (double.tryParse(v) == null)
-                    return 'Debe de ser un precio válido';
+                    return AppLocalizations.of(context)!.validPriceRequired;
                   return null;
                 },
               ),
@@ -274,7 +293,7 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
               // Fechas y observaciones son opcionales, no necesitan validator
               Row(
                 children: [
-                  const Text('Fecha de compra: '),
+                  Text(AppLocalizations.of(context)!.purchaseDate),
                   Text(
                     purchasedAt != null
                         ? '${purchasedAt!.day}/${purchasedAt!.month}/${purchasedAt!.year}'
@@ -290,7 +309,7 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
 
               Row(
                 children: [
-                  const Text('Fecha de finalización: '),
+                  Text(AppLocalizations.of(context)!.finishDate),
                   Text(
                     finishedAt != null
                         ? '${finishedAt!.day}/${finishedAt!.month}/${finishedAt!.year}'
@@ -306,7 +325,9 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
 
               TextFormField(
                 controller: _notesController,
-                decoration: const InputDecoration(labelText: 'Observaciones'),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.notes,
+                ),
                 maxLines: 3,
               ),
             ],

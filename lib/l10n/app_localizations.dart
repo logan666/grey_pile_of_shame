@@ -370,6 +370,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'of'**
   String get ofTotal;
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get name;
+
+  /// No description provided for @newUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'New Unit'**
+  String get newUnit;
+
+  /// No description provided for @editUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Unit'**
+  String get editUnit;
+
+  /// No description provided for @army.
+  ///
+  /// In en, this message translates to:
+  /// **'Army'**
+  String get army;
+
+  /// No description provided for @selectOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose...'**
+  String get selectOption;
+
+  /// No description provided for @paintingDifficulty.
+  ///
+  /// In en, this message translates to:
+  /// **'Painting difficulty:'**
+  String get paintingDifficulty;
+
+  /// No description provided for @points.
+  ///
+  /// In en, this message translates to:
+  /// **'Points'**
+  String get points;
+
+  /// No description provided for @price.
+  ///
+  /// In en, this message translates to:
+  /// **'Price (€)'**
+  String get price;
+
+  /// No description provided for @purchaseDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase date:'**
+  String get purchaseDate;
+
+  /// No description provided for @finishDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Completion date:'**
+  String get finishDate;
+
+  /// No description provided for @notes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get notes;
+
+  /// No description provided for @requiredField.
+  ///
+  /// In en, this message translates to:
+  /// **'Required field'**
+  String get requiredField;
+
+  /// No description provided for @integerRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be an integer number'**
+  String get integerRequired;
+
+  /// No description provided for @validPriceRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be a valid price'**
+  String get validPriceRequired;
+
+  /// No description provided for @deleteUnitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete unit'**
+  String get deleteUnitTitle;
+
+  /// No description provided for @deleteUnitConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete \"{name}\"?'**
+  String deleteUnitConfirm(Object name);
+
+  /// No description provided for @newGameSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Nuevo Sistema de Juego'**
+  String get newGameSystem;
+
+  /// No description provided for @gameSystemName.
+  ///
+  /// In en, this message translates to:
+  /// **'Nombre del sistema de juego'**
+  String get gameSystemName;
+
+  /// No description provided for @gameNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'El nombre no puede estar vacío'**
+  String get gameNameRequired;
+
+  /// No description provided for @gameSavedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Juego guardado correctamente'**
+  String get gameSavedSuccessfully;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -56,5 +56,28 @@
     "unitUpdated": "Unit \"{unitName}\" updated successfully",
     "unitDeleted": "Unit \"{unitName}\" deleted successfully",
     "addUnit": "Add Unit",
-    "ofTotal": "of"
+    "ofTotal": "of",
+
+    "category": "Category",
+    "name": "Name",
+    "newUnit": "New Unit",
+    "editUnit": "Edit Unit",
+    "army": "Army",
+    "selectOption": "Choose...",
+    "paintingDifficulty": "Painting difficulty:",
+    "points": "Points",
+    "price": "Price (€)",
+    "purchaseDate": "Purchase date:",
+    "finishDate": "Completion date:",
+    "notes": "Notes",
+    "requiredField": "Required field",
+    "integerRequired": "Must be an integer number",
+    "validPriceRequired": "Must be a valid price",
+    "deleteUnitTitle": "Delete unit",
+    "deleteUnitConfirm": "Are you sure you want to delete \"{name}\"?",
+
+    "newGameSystem": "Nuevo Sistema de Juego",
+    "gameSystemName": "Nombre del sistema de juego",
+    "gameNameRequired": "El nombre no puede estar vacío",
+    "gameSavedSuccessfully": "Juego guardado correctamente"
 }

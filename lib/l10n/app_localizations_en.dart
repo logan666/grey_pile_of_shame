@@ -157,4 +157,69 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ofTotal => 'of';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get newUnit => 'New Unit';
+
+  @override
+  String get editUnit => 'Edit Unit';
+
+  @override
+  String get army => 'Army';
+
+  @override
+  String get selectOption => 'Choose...';
+
+  @override
+  String get paintingDifficulty => 'Painting difficulty:';
+
+  @override
+  String get points => 'Points';
+
+  @override
+  String get price => 'Price (€)';
+
+  @override
+  String get purchaseDate => 'Purchase date:';
+
+  @override
+  String get finishDate => 'Completion date:';
+
+  @override
+  String get notes => 'Notes';
+
+  @override
+  String get requiredField => 'Required field';
+
+  @override
+  String get integerRequired => 'Must be an integer number';
+
+  @override
+  String get validPriceRequired => 'Must be a valid price';
+
+  @override
+  String get deleteUnitTitle => 'Delete unit';
+
+  @override
+  String deleteUnitConfirm(Object name) {
+    return 'Are you sure you want to delete \"$name\"?';
+  }
+
+  @override
+  String get newGameSystem => 'Nuevo Sistema de Juego';
+
+  @override
+  String get gameSystemName => 'Nombre del sistema de juego';
+
+  @override
+  String get gameNameRequired => 'El nombre no puede estar vacío';
+
+  @override
+  String get gameSavedSuccessfully => 'Juego guardado correctamente';
 }
