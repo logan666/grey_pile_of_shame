@@ -74,10 +74,5 @@
     "integerRequired": "Must be an integer number",
     "validPriceRequired": "Must be a valid price",
     "deleteUnitTitle": "Delete unit",
-    "deleteUnitConfirm": "Are you sure you want to delete \"{name}\"?",
-
-    "newGameSystem": "Nuevo Sistema de Juego",
-    "gameSystemName": "Nombre del sistema de juego",
-    "gameNameRequired": "El nombre no puede estar vacío",
-    "gameSavedSuccessfully": "Juego guardado correctamente"
+    "deleteUnitConfirm": "Are you sure you want to delete \"{name}\"?"
 }
