@@ -152,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       'assets/images/logos/${armyImageMapping[army.name]}',
                                       width: 40,
                                       height: 40,
-                                      fit: BoxFit.fitWidth,
+                                      fit: BoxFit.contain,
                                     ),
                                   )
                                 else
