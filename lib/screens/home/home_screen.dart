@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grey_pile_of_shame/database/repository/army_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/game_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/unit_repository.dart';
+import 'package:grey_pile_of_shame/l10n/app_localizations.dart';
 import 'package:grey_pile_of_shame/screens/settings/settings_screen.dart';
 import 'package:grey_pile_of_shame/screens/list/unit_screen.dart';
 import 'package:grey_pile_of_shame/utils/icon_mapping.dart';
@@ -95,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Grey Pile of Shame'),
+        title: Text(AppLocalizations.of(context)!.appTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -109,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: games.isEmpty
-          ? const Center(child: Text('No hay juegos con ejércitos visibles'))
+          ? Center(child: Text(AppLocalizations.of(context)!.noGamesVisible))
           : ListView(
               children: games.map((game) {
                 final armies = armiesByGame[game.id] ?? [];

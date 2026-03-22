@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grey_pile_of_shame/database/dao/parametric_dao.dart';
+import 'package:grey_pile_of_shame/l10n/app_localizations.dart';
 import 'screens/home/home_screen.dart';
 
 void main() async {
@@ -19,7 +20,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Grey Pile of Shame',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const HomeScreen(), // ← pantalla inicial nueva
+      home: const HomeScreen(),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: const Locale('en'), // idioma por defecto
     );
   }
 }

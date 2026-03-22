@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grey_pile_of_shame/l10n/app_localizations.dart';
 import 'package:grey_pile_of_shame/models/game.dart';
 import 'package:grey_pile_of_shame/models/army.dart';
 import 'package:grey_pile_of_shame/database/repository/game_repository.dart';
@@ -66,19 +67,29 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
     final result = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(game == null ? 'Nuevo juego' : 'Editar juego'),
+        title: Text(
+          game == null
+              ? AppLocalizations.of(context)!.newGame
+              : AppLocalizations.of(context)!.editGame,
+        ),
         content: TextField(
           controller: nameController,
-          decoration: const InputDecoration(hintText: 'Nombre del juego'),
+          decoration: InputDecoration(
+            hintText: AppLocalizations.of(context)!.gameName,
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, nameController.text),
-            child: Text(game == null ? 'Agregar' : 'Guardar'),
+            child: Text(
+              game == null
+                  ? AppLocalizations.of(context)!.add
+                  : AppLocalizations.of(context)!.save,
+            ),
           ),
         ],
       ),
@@ -86,7 +97,6 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
 
     if (result != null && result.isNotEmpty) {
       if (game == null) {
-        // CREAR
         final id = await GameRepository().insertGame(
           Game(name: result).toMap(),
         );
@@ -97,7 +107,6 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
           expandedGames[newGame.id!] = false;
         });
       } else {
-        // EDITAR
         final updatedGame = Game(id: game.id, name: result);
         await GameRepository().updateGame(updatedGame);
         setState(() {
@@ -113,18 +122,18 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Confirmar borrado'),
+        title: Text(AppLocalizations.of(context)!.confirmDeleteGameTitle),
         content: Text(
-          '¿Deseas borrar el juego "${game.name}" y todos sus ejércitos?',
+          AppLocalizations.of(context)!.confirmDeleteGameContent(game.name),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Borrar'),
+            child: Text(AppLocalizations.of(context)!.delete),
           ),
         ],
       ),
@@ -143,7 +152,6 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
   // --- CREAR / EDITAR EJÉRCITO ---
   Future<void> _showArmyDialog(int gameId, {Army? army}) async {
     final nameController = TextEditingController(text: army?.name ?? '');
-
     String? selectedImage = army?.image ?? armyImageMapping.values.first;
     String? selectedLogo = army?.logo ?? armyImageMapping.values.first;
 
@@ -153,31 +161,29 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text(army == null ? 'Nuevo ejército' : 'Editar ejército'),
-
+              title: Text(
+                army == null
+                    ? AppLocalizations.of(context)!.newArmy
+                    : AppLocalizations.of(context)!.editArmy,
+              ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
                     controller: nameController,
-                    decoration: const InputDecoration(
-                      hintText: 'Nombre del ejército',
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context)!.armyName,
                     ),
                   ),
-
                   const SizedBox(height: 20),
-
                   DropdownButtonFormField<String>(
                     value: selectedImage,
-
-                    decoration: const InputDecoration(
-                      labelText: 'Estilo visual',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.visualStyle,
                     ),
-
                     items: armyImageMapping.entries.map((entry) {
                       return DropdownMenuItem(
                         value: entry.value,
-
                         child: Row(
                           children: [
                             Image.asset(
@@ -185,33 +191,27 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
                               width: 40,
                               height: 40,
                             ),
-
                             const SizedBox(width: 12),
-
                             Text(entry.key),
                           ],
                         ),
                       );
                     }).toList(),
-
                     onChanged: (value) {
                       setState(() {
                         selectedImage = value;
                       });
                     },
                   ),
-
                   const SizedBox(height: 20),
-
                   DropdownButtonFormField<String>(
                     value: selectedLogo,
-
-                    decoration: const InputDecoration(labelText: 'Logo'),
-
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.logo,
+                    ),
                     items: armyImageMapping.entries.map((entry) {
                       return DropdownMenuItem(
                         value: entry.value,
-
                         child: Row(
                           children: [
                             Image.asset(
@@ -219,15 +219,12 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
                               width: 40,
                               height: 40,
                             ),
-
                             const SizedBox(width: 12),
-
                             Text(entry.key),
                           ],
                         ),
                       );
                     }).toList(),
-
                     onChanged: (value) {
                       setState(() {
                         selectedLogo = value;
@@ -236,16 +233,18 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
                   ),
                 ],
               ),
-
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: const Text('Cancelar'),
+                  child: Text(AppLocalizations.of(context)!.cancel),
                 ),
-
                 ElevatedButton(
                   onPressed: () => Navigator.pop(context, true),
-                  child: Text(army == null ? 'Agregar' : 'Guardar'),
+                  child: Text(
+                    army == null
+                        ? AppLocalizations.of(context)!.addArmy
+                        : AppLocalizations.of(context)!.saveArmy,
+                  ),
                 ),
               ],
             );
@@ -265,7 +264,6 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
             logo: selectedLogo,
           ),
         );
-
         final newArmy = Army(
           id: id,
           name: nameController.text,
@@ -274,7 +272,6 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
           image: selectedImage,
           logo: selectedLogo,
         );
-
         setState(() {
           gameArmies[gameId]!.add(newArmy);
         });
@@ -287,14 +284,10 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
           image: selectedImage,
           logo: selectedLogo,
         );
-
         await ArmyRepository().updateArmy(updatedArmy);
-
         setState(() {
           final list = gameArmies[army.gameId!]!;
-
           final index = list.indexWhere((a) => a.id == army.id);
-
           list[index] = updatedArmy;
         });
       }
@@ -306,16 +299,18 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Confirmar borrado'),
-        content: Text('¿Deseas borrar el ejército "${army.name}"?'),
+        title: Text(AppLocalizations.of(context)!.confirmDeleteArmyTitle),
+        content: Text(
+          AppLocalizations.of(context)!.confirmDeleteArmyContent(army.name),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Borrar'),
+            child: Text(AppLocalizations.of(context)!.delete),
           ),
         ],
       ),
@@ -333,7 +328,7 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Juegos y Ejércitos'),
+        title: Text(AppLocalizations.of(context)!.appBarTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -341,76 +336,78 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
           ),
         ],
       ),
-      body: ListView(
-        children: games.map((game) {
-          final armies = gameArmies[game.id!] ?? [];
-          final isExpanded = expandedGames[game.id!] ?? false;
+      body: games.isEmpty
+          ? Center(child: Text(AppLocalizations.of(context)!.noGamesVisible))
+          : ListView(
+              children: games.map((game) {
+                final armies = gameArmies[game.id!] ?? [];
+                final isExpanded = expandedGames[game.id!] ?? false;
 
-          return ExpansionTile(
-            key: ValueKey(game.id),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(game.name),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit, size: 20),
-                      onPressed: () => _showGameDialog(game: game),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete, size: 20),
-                      onPressed: () => _deleteGame(game),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            initiallyExpanded: isExpanded,
-            onExpansionChanged: (expanded) {
-              setState(() {
-                expandedGames[game.id!] = expanded;
-              });
-            },
-            children: [
-              ...armies.map((army) {
-                return ListTile(
+                return ExpansionTile(
+                  key: ValueKey(game.id),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(army.name),
+                      Text(game.name),
                       Row(
                         children: [
                           IconButton(
                             icon: const Icon(Icons.edit, size: 20),
-                            onPressed: () =>
-                                _showArmyDialog(game.id!, army: army),
+                            onPressed: () => _showGameDialog(game: game),
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete, size: 20),
-                            onPressed: () => _deleteArmy(army),
+                            onPressed: () => _deleteGame(game),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  trailing: Switch(
-                    value: army.visible,
-                    onChanged: (value) => _toggleVisible(army, value),
-                    activeThumbColor: Colors.green,
-                    activeTrackColor: Colors.green.shade200,
-                  ),
+                  initiallyExpanded: isExpanded,
+                  onExpansionChanged: (expanded) {
+                    setState(() {
+                      expandedGames[game.id!] = expanded;
+                    });
+                  },
+                  children: [
+                    ...armies.map((army) {
+                      return ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(army.name),
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.edit, size: 20),
+                                  onPressed: () =>
+                                      _showArmyDialog(game.id!, army: army),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete, size: 20),
+                                  onPressed: () => _deleteArmy(army),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        trailing: Switch(
+                          value: army.visible,
+                          onChanged: (value) => _toggleVisible(army, value),
+                          activeThumbColor: Colors.green,
+                          activeTrackColor: Colors.green.shade200,
+                        ),
+                      );
+                    }).toList(),
+                    ListTile(
+                      leading: const Icon(Icons.add),
+                      title: Text(AppLocalizations.of(context)!.addArmy),
+                      onTap: () => _showArmyDialog(game.id!),
+                    ),
+                  ],
                 );
               }).toList(),
-              ListTile(
-                leading: const Icon(Icons.add),
-                title: const Text('Agregar ejército'),
-                onTap: () => _showArmyDialog(game.id!),
-              ),
-            ],
-          );
-        }).toList(),
-      ),
+            ),
     );
   }
 }
