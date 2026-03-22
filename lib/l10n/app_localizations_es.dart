@@ -12,10 +12,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appTitle => 'Grey Pile of Shame';
 
   @override
-  String get welcome => 'Bienvenido';
+  String get welcome => '¡Bienvenido!';
 
   @override
-  String get noGamesVisible => 'No hay juegos con ejércitos visibles';
+  String get noGamesVisible => 'No hay juegos con ejércitos visibles.';
 
   @override
   String get cancel => 'Cancelar';
@@ -24,36 +24,36 @@ class AppLocalizationsEs extends AppLocalizations {
   String get save => 'Guardar';
 
   @override
-  String get add => 'Agregar';
+  String get add => 'Añadir';
 
   @override
-  String get delete => 'Borrar';
+  String get delete => 'Eliminar';
 
   @override
   String get appBarTitle => 'Juegos y Ejércitos';
 
   @override
-  String get newGame => 'Nuevo juego';
+  String get newGame => 'Nuevo Juego';
 
   @override
-  String get editGame => 'Editar juego';
+  String get editGame => 'Editar Juego';
 
   @override
   String get gameName => 'Nombre del juego';
 
   @override
-  String get confirmDeleteGameTitle => 'Confirmar borrado';
+  String get confirmDeleteGameTitle => 'Confirmación de borrado';
 
   @override
   String confirmDeleteGameContent(Object gameName) {
-    return '¿Deseas borrar el juego \"$gameName\" y todos sus ejércitos?';
+    return '¿Quieres eliminar el juego \"$gameName\" y todos sus ejércitos?';
   }
 
   @override
-  String get newArmy => 'Nuevo ejército';
+  String get newArmy => 'Nuevo Ejército';
 
   @override
-  String get editArmy => 'Editar ejército';
+  String get editArmy => 'Editar Ejército';
 
   @override
   String get armyName => 'Nombre del ejército';
@@ -65,149 +65,149 @@ class AppLocalizationsEs extends AppLocalizations {
   String get logo => 'Logo';
 
   @override
-  String get addArmy => 'Agregar ejército';
+  String get addArmy => 'Añadir ejército';
 
   @override
   String get saveArmy => 'Guardar';
 
   @override
-  String get confirmDeleteArmyTitle => 'Confirmar borrado';
+  String get confirmDeleteArmyTitle => 'Confirmación de borrado';
 
   @override
   String confirmDeleteArmyContent(Object armyName) {
-    return '¿Deseas borrar el ejército \"$armyName\"?';
+    return '¿Quieres eliminar el ejército \"$armyName\"?';
   }
 
   @override
-  String get categorySettingsTitle => 'Category Settings';
+  String get categorySettingsTitle => 'Configuración de categorías';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => 'Nueva categoría';
 
   @override
-  String get editCategory => 'Edit Category';
+  String get editCategory => 'Editar categoría';
 
   @override
-  String get deleteCategoryTitle => 'Delete Category';
+  String get deleteCategoryTitle => 'Eliminar categoría';
 
   @override
   String deleteCategoryContent(Object categoryName) {
-    return 'Are you sure you want to delete \"$categoryName\"?';
+    return '¿Seguro que quieres eliminar \"$categoryName\"?';
   }
 
   @override
-  String get categoryNameLabel => 'Name';
+  String get categoryNameLabel => 'Nombre';
 
   @override
-  String get categoryIconLabel => 'Icon';
+  String get categoryIconLabel => 'Icono';
 
   @override
-  String get settingsTitle => 'Settings';
+  String get settingsTitle => 'Configuración';
 
   @override
-  String get armiesTitle => 'Armies';
+  String get armiesTitle => 'Ejércitos';
 
   @override
-  String get armiesSubtitle => 'Show or hide armies';
+  String get armiesSubtitle => 'Mostrar u ocultar ejércitos';
 
   @override
-  String get categoriesTitle => 'Categories';
+  String get categoriesTitle => 'Categorías';
 
   @override
-  String get categoriesSubtitle => 'Manage unit categories';
+  String get categoriesSubtitle => 'Gestionar categorías de unidades';
 
   @override
-  String get newMiniatureTitle => 'New Miniature';
+  String get newMiniatureTitle => 'Nueva miniatura';
 
   @override
-  String get descriptionLabel => 'Description';
+  String get descriptionLabel => 'Descripción';
 
   @override
-  String get changeAllStatusesTooltip => 'Change status for all';
+  String get changeAllStatusesTooltip => 'Cambiar estado para todos';
 
   @override
-  String get unknownStatus => 'Unknown';
+  String get unknownStatus => 'Desconocido';
 
   @override
-  String get finishedStatusCheck => 'Finished';
+  String get finishedStatusCheck => 'Finalizado';
 
   @override
-  String get noUnitsYet => 'No units yet';
+  String get noUnitsYet => 'Aún no hay unidades';
 
   @override
-  String get uncategorized => 'No category';
+  String get uncategorized => 'Sin categoría';
 
   @override
   String unitCreated(Object unitName) {
-    return 'Unit \"$unitName\" created successfully';
+    return 'Unidad \"$unitName\" creada correctamente';
   }
 
   @override
   String unitUpdated(Object unitName) {
-    return 'Unit \"$unitName\" updated successfully';
+    return 'Unidad \"$unitName\" actualizada correctamente';
   }
 
   @override
   String unitDeleted(Object unitName) {
-    return 'Unit \"$unitName\" deleted successfully';
+    return 'Unidad \"$unitName\" eliminada correctamente';
   }
 
   @override
-  String get addUnit => 'Add Unit';
+  String get addUnit => 'Añadir unidad';
 
   @override
-  String get ofTotal => 'of';
+  String get ofTotal => 'de';
 
   @override
-  String get category => 'Category';
+  String get category => 'Categoría';
 
   @override
-  String get name => 'Name';
+  String get name => 'Nombre';
 
   @override
-  String get newUnit => 'New Unit';
+  String get newUnit => 'Nueva unidad';
 
   @override
-  String get editUnit => 'Edit Unit';
+  String get editUnit => 'Editar unidad';
 
   @override
-  String get army => 'Army';
+  String get army => 'Ejército';
 
   @override
-  String get selectOption => 'Choose...';
+  String get selectOption => 'Seleccione...';
 
   @override
-  String get paintingDifficulty => 'Painting difficulty:';
+  String get paintingDifficulty => 'Complejidad de pintado:';
 
   @override
-  String get points => 'Points';
+  String get points => 'Puntos';
 
   @override
-  String get price => 'Price (€)';
+  String get price => 'Precio (€)';
 
   @override
-  String get purchaseDate => 'Purchase date:';
+  String get purchaseDate => 'Fecha de compra:';
 
   @override
-  String get finishDate => 'Completion date:';
+  String get finishDate => 'Fecha de finalización:';
 
   @override
-  String get notes => 'Notes';
+  String get notes => 'Observaciones';
 
   @override
-  String get requiredField => 'Required field';
+  String get requiredField => 'Campo obligatorio';
 
   @override
-  String get integerRequired => 'Must be an integer number';
+  String get integerRequired => 'Debe ser un número entero';
 
   @override
-  String get validPriceRequired => 'Must be a valid price';
+  String get validPriceRequired => 'Debe ser un precio válido';
 
   @override
-  String get deleteUnitTitle => 'Delete unit';
+  String get deleteUnitTitle => 'Eliminar unidad';
 
   @override
   String deleteUnitConfirm(Object name) {
-    return 'Are you sure you want to delete \"$name\"?';
+    return '¿Seguro que quieres eliminar \"$name\"?';
   }
 }
