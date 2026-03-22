@@ -17,7 +17,7 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    final path = join(await getDatabasesPath(), 'grey_pile_of_shame7.db');
+    final path = join(await getDatabasesPath(), 'grey_pile_of_shame8.db');
     return await openDatabase(
       path,
       version: 1,

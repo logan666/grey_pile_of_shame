@@ -34,6 +34,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> loadData() async {
     final loadedGames = await gameRepository.getGames();
 
+    // ORDENAR JUEGOS
+    loadedGames.sort(
+      (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
+    );
+
     Map<int, List<Army>> map = {};
     Map<int, Map<String, int>> progressMap = {};
 
@@ -41,6 +46,11 @@ class _HomeScreenState extends State<HomeScreen> {
       if (game.id == null) continue;
 
       final armies = await armyRepository.getVisibleArmiesByGame(game.id!);
+
+      // ORDENAR EJÉRCITOS
+      armies.sort(
+        (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
+      );
 
       if (armies.isNotEmpty) {
         map[game.id!] = armies;
