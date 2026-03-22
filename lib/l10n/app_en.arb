@@ -42,5 +42,19 @@
     "armiesTitle": "Armies",
     "armiesSubtitle": "Show or hide armies",
     "categoriesTitle": "Categories",
-    "categoriesSubtitle": "Manage unit categories"
+    "categoriesSubtitle": "Manage unit categories",
+
+    "newMiniatureTitle": "New Miniature",
+    "descriptionLabel": "Description",
+    "changeAllStatusesTooltip": "Change status for all",
+    "unknownStatus": "Unknown",
+    "finishedStatusCheck": "Finished",
+
+    "noUnitsYet": "No units yet",
+    "uncategorized": "No category",
+    "unitCreated": "Unit \"{unitName}\" created successfully",
+    "unitUpdated": "Unit \"{unitName}\" updated successfully",
+    "unitDeleted": "Unit \"{unitName}\" deleted successfully",
+    "addUnit": "Add Unit",
+    "ofTotal": "of"
 }

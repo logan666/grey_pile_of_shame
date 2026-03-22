@@ -3,6 +3,7 @@ import 'package:grey_pile_of_shame/database/repository/army_category_repository.
 import 'package:grey_pile_of_shame/database/repository/army_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/parametric_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/unit_repository.dart';
+import 'package:grey_pile_of_shame/l10n/app_localizations.dart';
 import 'package:grey_pile_of_shame/models/army_category.dart';
 import 'package:grey_pile_of_shame/models/unit.dart';
 import 'package:grey_pile_of_shame/models/army.dart';
@@ -99,11 +100,11 @@ class _UnitScreenState extends State<UnitScreen> {
       final name = result['name'];
       String message = '';
       if (action == 'created') {
-        message = 'Unidad "$name" creada correctamente';
+        message = AppLocalizations.of(context)!.unitCreated(name);
       } else if (action == 'updated') {
-        message = 'Unidad "$name" actualizada correctamente';
+        message = AppLocalizations.of(context)!.unitUpdated(name);
       } else if (action == 'deleted') {
-        message = 'Unidad "$name" eliminada correctamente';
+        message = AppLocalizations.of(context)!.unitDeleted(name);
       }
 
       if (message.isNotEmpty) {
@@ -123,7 +124,7 @@ class _UnitScreenState extends State<UnitScreen> {
         orElse: () => ArmyCategory(
           id: 0,
           gameId: widget.army.gameId!,
-          name: 'Sin categoría',
+          name: AppLocalizations.of(context)!.uncategorized,
           icon: 'default',
         ),
       );
@@ -155,7 +156,7 @@ class _UnitScreenState extends State<UnitScreen> {
         ),
       ),
       body: units.isEmpty
-          ? const Center(child: Text('No hay unidades todavía'))
+          ? Center(child: Text(AppLocalizations.of(context)!.noUnitsYet))
           : Column(
               children: [
                 // Barra total del ejército
@@ -181,7 +182,10 @@ class _UnitScreenState extends State<UnitScreen> {
                           children: [
                             const Spacer(),
                             Text(
-                              '${unitProgress.values.fold<int>(0, (sum, e) => sum + (e['finished'] ?? 0))} de ${unitProgress.values.fold<int>(0, (sum, e) => sum + (e['total'] ?? 0))} (${(getArmyProgress() * 100).toInt()}%)',
+                              '${unitProgress.values.fold<int>(0, (sum, e) => sum + (e['finished'] ?? 0))} '
+                              '${AppLocalizations.of(context)!.ofTotal} '
+                              '${unitProgress.values.fold<int>(0, (sum, e) => sum + (e['total'] ?? 0))} '
+                              '(${(getArmyProgress() * 100).toInt()}%)',
                               style: const TextStyle(fontSize: 12),
                             ),
                           ],
@@ -257,7 +261,7 @@ class _UnitScreenState extends State<UnitScreen> {
                                           children: [
                                             const Spacer(),
                                             Text(
-                                              '$finished de $total (${(progress * 100).toInt()}%)',
+                                              '$finished ${AppLocalizations.of(context)!.ofTotal} $total (${(progress * 100).toInt()}%)',
                                               style: const TextStyle(
                                                 fontSize: 12,
                                               ),

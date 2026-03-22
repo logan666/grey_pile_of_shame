@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grey_pile_of_shame/database/repository/army_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/miniature_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/parametric_repository.dart';
+import 'package:grey_pile_of_shame/l10n/app_localizations.dart';
 import 'package:grey_pile_of_shame/models/unit.dart';
 import 'package:grey_pile_of_shame/models/miniature.dart';
 
@@ -32,8 +33,6 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
   Future<void> _loadArmyImage() async {
     final army = await armyRepository.getArmyById(widget.unit.armyId!);
 
-    print('>>> army: id=${army?.id}, image=${army?.image}, logo=${army?.logo}');
-
     setState(() {
       armyImage = army?.image;
     });
@@ -50,11 +49,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
 
     for (var mini in miniatures) {
       if (!paintingStatuses.any((s) => s['id'] == mini.paintingStatus)) {
-        print(
-          '>>> Miniatura "${mini.description}" tiene estado inválido: ${mini.paintingStatus}',
-        );
-        mini.paintingStatus =
-            paintingStatuses.first['id']; // opcional: asignar un valor válido
+        mini.paintingStatus = paintingStatuses.first['id'];
       }
     }
   }
@@ -69,14 +64,16 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: const Text('Nueva Miniatura'),
+              title: Text(AppLocalizations.of(context)!.newMiniatureTitle),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Descripción
                   TextField(
                     controller: descriptionController,
-                    decoration: const InputDecoration(labelText: 'Descripción'),
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.descriptionLabel,
+                    ),
                   ),
 
                   const SizedBox(height: 16),
@@ -107,11 +104,11 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: const Text('Cancelar'),
+                  child: Text(AppLocalizations.of(context)!.cancel),
                 ),
                 TextButton(
                   onPressed: () => Navigator.pop(context, true),
-                  child: const Text('Añadir'),
+                  child: Text(AppLocalizations.of(context)!.add),
                 ),
               ],
             );
@@ -183,10 +180,13 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
             onPressed: () => Navigator.pop(context, -99), // código especial
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: const [
+              children: [
                 Icon(Icons.delete, color: Colors.red),
                 SizedBox(width: 12),
-                Text('Eliminar', style: TextStyle(color: Colors.red)),
+                Text(
+                  AppLocalizations.of(context)!.delete,
+                  style: TextStyle(color: Colors.red),
+                ),
               ],
             ),
           ),
@@ -210,7 +210,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
     final newStatusId = await showDialog<int>(
       context: context,
       builder: (_) => SimpleDialog(
-        title: const Text('La unidad completa'),
+        title: Text(AppLocalizations.of(context)!.changeAllStatusesTooltip),
         children: paintingStatuses.map((status) {
           final color = _hexToColor(status['color'] as String);
           final name = status['name'] as String;
@@ -269,7 +269,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
           IconButton(
             icon: const Icon(Icons.color_lens),
             onPressed: _changeAllStatuses,
-            tooltip: 'Cambiar estado de todas',
+            tooltip: AppLocalizations.of(context)!.changeAllStatusesTooltip,
           ),
         ],
       ),
@@ -280,7 +280,10 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
           final mini = miniatures[index];
           final status = paintingStatuses.firstWhere(
             (s) => s['id'] == mini.paintingStatus,
-            orElse: () => {'name': 'Desconocido', 'color': '#9E9E9E'},
+            orElse: () => {
+              'name': AppLocalizations.of(context)!.unknownStatus,
+              'color': '#9E9E9E',
+            },
           );
           final statusColor = _hexToColor(status['color']);
           final statusName = status['name'];

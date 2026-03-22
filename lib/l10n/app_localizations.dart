@@ -298,6 +298,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Manage unit categories'**
   String get categoriesSubtitle;
+
+  /// No description provided for @newMiniatureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Miniature'**
+  String get newMiniatureTitle;
+
+  /// No description provided for @descriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get descriptionLabel;
+
+  /// No description provided for @changeAllStatusesTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Change status for all'**
+  String get changeAllStatusesTooltip;
+
+  /// No description provided for @unknownStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknownStatus;
+
+  /// No description provided for @finishedStatusCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished'**
+  String get finishedStatusCheck;
+
+  /// No description provided for @noUnitsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No units yet'**
+  String get noUnitsYet;
+
+  /// No description provided for @uncategorized.
+  ///
+  /// In en, this message translates to:
+  /// **'No category'**
+  String get uncategorized;
+
+  /// No description provided for @unitCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit \"{unitName}\" created successfully'**
+  String unitCreated(Object unitName);
+
+  /// No description provided for @unitUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit \"{unitName}\" updated successfully'**
+  String unitUpdated(Object unitName);
+
+  /// No description provided for @unitDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit \"{unitName}\" deleted successfully'**
+  String unitDeleted(Object unitName);
+
+  /// No description provided for @addUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Unit'**
+  String get addUnit;
+
+  /// No description provided for @ofTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'of'**
+  String get ofTotal;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

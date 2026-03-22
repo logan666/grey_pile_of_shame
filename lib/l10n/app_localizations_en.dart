@@ -115,4 +115,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categoriesSubtitle => 'Manage unit categories';
+
+  @override
+  String get newMiniatureTitle => 'New Miniature';
+
+  @override
+  String get descriptionLabel => 'Description';
+
+  @override
+  String get changeAllStatusesTooltip => 'Change status for all';
+
+  @override
+  String get unknownStatus => 'Unknown';
+
+  @override
+  String get finishedStatusCheck => 'Finished';
+
+  @override
+  String get noUnitsYet => 'No units yet';
+
+  @override
+  String get uncategorized => 'No category';
+
+  @override
+  String unitCreated(Object unitName) {
+    return 'Unit \"$unitName\" created successfully';
+  }
+
+  @override
+  String unitUpdated(Object unitName) {
+    return 'Unit \"$unitName\" updated successfully';
+  }
+
+  @override
+  String unitDeleted(Object unitName) {
+    return 'Unit \"$unitName\" deleted successfully';
+  }
+
+  @override
+  String get addUnit => 'Add Unit';
+
+  @override
+  String get ofTotal => 'of';
 }
