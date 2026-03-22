@@ -31,4 +31,8 @@ class ArmyRepository {
   Future<List<Army>> getVisibleArmiesByGame(int gameId) async {
     return _armyDao.getVisibleArmiesByGame(gameId);
   }
+
+  Future<Army?> getArmyById(int id) async {
+    return _armyDao.getArmyById(id);
+  }
 }

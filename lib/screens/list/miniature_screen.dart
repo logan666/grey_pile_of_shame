@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grey_pile_of_shame/database/repository/army_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/miniature_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/parametric_repository.dart';
 import 'package:grey_pile_of_shame/models/unit.dart';
@@ -17,12 +18,23 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
   final parametricRepository = ParametricRepository();
   List<Map<String, dynamic>> paintingStatuses = [];
   List<Miniature> miniatures = [];
+  final armyRepository = ArmyRepository();
+  String? armyImage;
 
   @override
   void initState() {
     super.initState();
     _initScreen();
     loadMiniatures();
+    _loadArmyImage();
+  }
+
+  Future<void> _loadArmyImage() async {
+    final army = await armyRepository.getArmyById(widget.unit.armyId!);
+
+    setState(() {
+      armyImage = army?.image;
+    });
   }
 
   Future<void> _initScreen() async {
@@ -298,7 +310,9 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
                           bottomRight: Radius.circular(8),
                         ),
                         image: DecorationImage(
-                          image: AssetImage('assets/images/marine.png'),
+                          image: AssetImage(
+                            'assets/images/armys/${armyImage ?? "space_marines.png"}',
+                          ),
                           fit: BoxFit.cover,
                           colorFilter: ColorFilter.mode(
                             Colors.black.withOpacity(1),

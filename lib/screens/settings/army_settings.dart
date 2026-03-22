@@ -3,6 +3,7 @@ import 'package:grey_pile_of_shame/models/game.dart';
 import 'package:grey_pile_of_shame/models/army.dart';
 import 'package:grey_pile_of_shame/database/repository/game_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/army_repository.dart';
+import 'package:grey_pile_of_shame/utils/icon_mapping.dart';
 
 class ArmiesSettingsPage extends StatefulWidget {
   const ArmiesSettingsPage({super.key});
@@ -141,54 +142,119 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
   Future<void> _showArmyDialog(int gameId, {Army? army}) async {
     final nameController = TextEditingController(text: army?.name ?? '');
 
-    final result = await showDialog<String>(
+    String? selectedImage = army?.image ?? armyImageMapping.values.first;
+
+    final result = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(army == null ? 'Nuevo ejército' : 'Editar ejército'),
-        content: TextField(
-          controller: nameController,
-          decoration: const InputDecoration(hintText: 'Nombre del ejército'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, nameController.text),
-            child: Text(army == null ? 'Agregar' : 'Guardar'),
-          ),
-        ],
-      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text(army == null ? 'Nuevo ejército' : 'Editar ejército'),
+
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                      hintText: 'Nombre del ejército',
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  DropdownButtonFormField<String>(
+                    value: selectedImage,
+
+                    decoration: const InputDecoration(
+                      labelText: 'Estilo visual',
+                    ),
+
+                    items: armyImageMapping.entries.map((entry) {
+                      return DropdownMenuItem(
+                        value: entry.value,
+
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/armys/${entry.value}',
+                              width: 40,
+                              height: 40,
+                            ),
+
+                            const SizedBox(width: 12),
+
+                            Text(entry.key),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+
+                    onChanged: (value) {
+                      setState(() {
+                        selectedImage = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: const Text('Cancelar'),
+                ),
+
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: Text(army == null ? 'Agregar' : 'Guardar'),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
 
-    if (result != null && result.isNotEmpty) {
+    if (result ?? false) {
       if (army == null) {
-        // CREAR
         final id = await ArmyRepository().insertArmy(
-          Army(name: result, gameId: gameId, visible: true),
+          Army(
+            name: nameController.text,
+            gameId: gameId,
+            visible: true,
+            image: selectedImage,
+          ),
         );
+
         final newArmy = Army(
           id: id,
-          name: result,
+          name: nameController.text,
           gameId: gameId,
           visible: true,
+          image: selectedImage,
         );
+
         setState(() {
           gameArmies[gameId]!.add(newArmy);
         });
       } else {
-        // EDITAR
         final updatedArmy = Army(
           id: army.id,
-          name: result,
+          name: nameController.text,
           gameId: army.gameId,
           visible: army.visible,
+          image: selectedImage,
         );
+
         await ArmyRepository().updateArmy(updatedArmy);
+
         setState(() {
           final list = gameArmies[army.gameId!]!;
+
           final index = list.indexWhere((a) => a.id == army.id);
+
           list[index] = updatedArmy;
         });
       }

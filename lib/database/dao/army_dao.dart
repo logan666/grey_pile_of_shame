@@ -69,4 +69,14 @@ class ArmyDao {
 
     return maps.map((m) => Army.fromMap(m)).toList();
   }
+
+  Future<Army?> getArmyById(int id) async {
+    final db = await dbHelper.database;
+
+    final result = await db.query('armies', where: 'id = ?', whereArgs: [id]);
+
+    if (result.isEmpty) return null;
+
+    return Army.fromMap(result.first);
+  }
 }
