@@ -32,6 +32,8 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
   Future<void> _loadArmyImage() async {
     final army = await armyRepository.getArmyById(widget.unit.armyId!);
 
+    print('>>> army: id=${army?.id}, image=${army?.image}, logo=${army?.logo}');
+
     setState(() {
       armyImage = army?.image;
     });

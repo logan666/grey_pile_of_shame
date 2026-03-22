@@ -46,6 +46,8 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
       gameId: army.gameId,
       name: army.name,
       visible: value,
+      image: army.image,
+      logo: army.logo,
     );
 
     await ArmyRepository().updateArmy(updatedArmy);
@@ -143,7 +145,7 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
     final nameController = TextEditingController(text: army?.name ?? '');
 
     String? selectedImage = army?.image ?? armyImageMapping.values.first;
-    String? selectedLogo = army?.image ?? armyImageMapping.values.first;
+    String? selectedLogo = army?.logo ?? armyImageMapping.values.first;
 
     final result = await showDialog<bool>(
       context: context,
