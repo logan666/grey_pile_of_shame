@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:grey_pile_of_shame/database/dao/army_dao.dart';
-import 'package:grey_pile_of_shame/database/dao/parametric_dao.dart';
+import 'package:grey_pile_of_shame/database/dao/paint_status_dao.dart';
 import 'package:grey_pile_of_shame/database/repository/army_category_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/unit_repository.dart';
 import 'package:grey_pile_of_shame/l10n/app_localizations.dart';
 import 'package:grey_pile_of_shame/models/army_category.dart';
+import 'package:grey_pile_of_shame/models/paint_status.dart';
 import 'package:grey_pile_of_shame/models/unit.dart';
 import 'package:grey_pile_of_shame/models/army.dart';
 
@@ -34,12 +35,12 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
 
   List<Army> armies = [];
   List<ArmyCategory> roles = [];
-  List<Map<String, dynamic>> paintingStatuses = [];
+  List<PaintingStatus> paintingStatuses = [];
 
   bool isLoading = true;
 
   final armyDao = ArmyDao();
-  final paramDao = ParametricDao();
+  final paintDao = PaintingStatusDao();
   final unitRepository = UnitRepository();
   final categoryRepository = ArmyCategoryRepository();
 
@@ -54,7 +55,7 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
     armies = await armyDao.getAllArmies();
 
     // Cargar estados de pintado
-    paintingStatuses = await paramDao.getPaintingStatuses();
+    paintingStatuses = await paintDao.getAll();
 
     // Si editando, precargar datos
     if (widget.unit != null) {
@@ -77,11 +78,11 @@ class _UnitEditScreenState extends State<UnitEditScreen> {
         (a) => a.id == widget.armyId,
         orElse: () => armies.first,
       );
-      selectedPaintingStatusId = paintingStatuses.first['id'];
+      selectedPaintingStatusId = paintingStatuses.first.id;
     } else {
       selectedArmy = armies.isNotEmpty ? armies.first : null;
       selectedPaintingStatusId = paintingStatuses.isNotEmpty
-          ? paintingStatuses.first['id']
+          ? paintingStatuses.first.id
           : null;
     }
 

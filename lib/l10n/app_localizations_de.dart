@@ -210,4 +210,33 @@ class AppLocalizationsDe extends AppLocalizations {
   String deleteUnitConfirm(Object name) {
     return 'Möchtest du \"$name\" wirklich löschen?';
   }
+
+  @override
+  String get paintingStatusSettingsTitle => 'Bemalungsstatus';
+
+  @override
+  String get paintingStatusSettingsSubtitle => 'Bemalungszustände verwalten';
+
+  @override
+  String get newPaintingStatus => 'Neuer Bemalungsstatus';
+
+  @override
+  String get editPaintingStatus => 'Bemalungsstatus bearbeiten';
+
+  @override
+  String get deletePaintingStatusTitle => 'Bemalungsstatus löschen';
+
+  @override
+  String deletePaintingStatusContent(Object name) {
+    return 'Möchten Sie den Bemalungsstatus \"$name\" wirklich löschen?';
+  }
+
+  @override
+  String get statusNameLabel => 'Name';
+
+  @override
+  String get statusColorLabel => 'Farbe';
+
+  @override
+  String get statusOrderLabel => 'Reihenfolge';
 }

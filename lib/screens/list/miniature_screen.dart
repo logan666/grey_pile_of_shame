@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:grey_pile_of_shame/database/repository/army_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/miniature_repository.dart';
-import 'package:grey_pile_of_shame/database/repository/parametric_repository.dart';
+import 'package:grey_pile_of_shame/database/repository/paint_status_repository.dart';
 import 'package:grey_pile_of_shame/l10n/app_localizations.dart';
+import 'package:grey_pile_of_shame/models/paint_status.dart';
 import 'package:grey_pile_of_shame/models/unit.dart';
 import 'package:grey_pile_of_shame/models/miniature.dart';
 
@@ -16,8 +17,8 @@ class MiniatureScreen extends StatefulWidget {
 
 class _MiniatureScreenState extends State<MiniatureScreen> {
   final repo = MiniatureRepository();
-  final parametricRepository = ParametricRepository();
-  List<Map<String, dynamic>> paintingStatuses = [];
+  final paintRepository = PaintingStatusRepository();
+  List<PaintingStatus> paintingStatuses = [];
   List<Miniature> miniatures = [];
   final armyRepository = ArmyRepository();
   String? armyImage;
@@ -39,7 +40,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
   }
 
   Future<void> _initScreen() async {
-    paintingStatuses = await parametricRepository.getPaintingStatuses();
+    paintingStatuses = await paintRepository.getAll();
     await loadMiniatures();
   }
 
@@ -48,8 +49,8 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
     setState(() => miniatures = data);
 
     for (var mini in miniatures) {
-      if (!paintingStatuses.any((s) => s['id'] == mini.paintingStatus)) {
-        mini.paintingStatus = paintingStatuses.first['id'];
+      if (!paintingStatuses.any((s) => s.id == mini.paintingStatus)) {
+        mini.paintingStatus = paintingStatuses.first.id!;
       }
     }
   }
@@ -126,7 +127,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
             : ('$baseDescription ${i + 1}');
 
         final defaultStatusId = paintingStatuses.isNotEmpty
-            ? paintingStatuses.first['id'] as int
+            ? paintingStatuses.first.id as int
             : 1;
 
         await repo.insertMiniature(
@@ -150,9 +151,9 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
         title: Text(mini.description),
         children: [
           ...paintingStatuses.map((status) {
-            final color = _hexToColor(status['color'] as String);
-            final name = status['name'] as String;
-            final id = status['id'] as int;
+            final color = _hexToColor(status.color as String);
+            final name = status.name as String;
+            final id = status.id as int;
 
             return SimpleDialogOption(
               onPressed: () => Navigator.pop(context, id),
@@ -212,9 +213,9 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
       builder: (_) => SimpleDialog(
         title: Text(AppLocalizations.of(context)!.changeAllStatusesTooltip),
         children: paintingStatuses.map((status) {
-          final color = _hexToColor(status['color'] as String);
-          final name = status['name'] as String;
-          final id = status['id'] as int;
+          final color = _hexToColor(status.color as String);
+          final name = status.name as String;
+          final id = status.id as int;
 
           return SimpleDialogOption(
             onPressed: () => Navigator.pop(context, id),
@@ -256,8 +257,8 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
   }
 
   bool _isFinishedStatus(int statusId) {
-    final status = paintingStatuses.firstWhere((s) => s['id'] == statusId);
-    return status['name'].toLowerCase() == 'terminado';
+    final status = paintingStatuses.firstWhere((s) => s.id == statusId);
+    return status.name.toLowerCase() == 'terminado';
   }
 
   @override
@@ -278,15 +279,18 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
         itemCount: miniatures.length,
         itemBuilder: (context, index) {
           final mini = miniatures[index];
+
           final status = paintingStatuses.firstWhere(
-            (s) => s['id'] == mini.paintingStatus,
-            orElse: () => {
-              'name': AppLocalizations.of(context)!.unknownStatus,
-              'color': '#9E9E9E',
-            },
+            (s) => s.id == mini.paintingStatus,
+            orElse: () => PaintingStatus(
+              id: 0,
+              name: AppLocalizations.of(context)!.unknownStatus,
+              orden: 999,
+              color: '#9E9E9E',
+            ),
           );
-          final statusColor = _hexToColor(status['color']);
-          final statusName = status['name'];
+          final statusColor = _hexToColor(status.color);
+          final statusName = status.name;
 
           return GestureDetector(
             onTap: () => _changeStatus(mini), // acción al pulsar
@@ -344,7 +348,7 @@ class _MiniatureScreenState extends State<MiniatureScreen> {
                             border: Border.all(color: Colors.black, width: 2),
                           ),
                         ),
-                        if (_isFinishedStatus(status['id']))
+                        if (_isFinishedStatus(status.id!))
                           const Icon(
                             Icons.check,
                             size: 18,

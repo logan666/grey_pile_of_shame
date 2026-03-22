@@ -70,5 +70,15 @@
     "integerRequired": "Muss eine ganze Zahl sein",
     "validPriceRequired": "Muss ein gültiger Preis sein",
     "deleteUnitTitle": "Einheit löschen",
-    "deleteUnitConfirm": "Möchtest du \"{name}\" wirklich löschen?"
+    "deleteUnitConfirm": "Möchtest du \"{name}\" wirklich löschen?",
+
+    "paintingStatusSettingsTitle": "Bemalungsstatus",
+    "paintingStatusSettingsSubtitle": "Bemalungszustände verwalten",
+    "newPaintingStatus": "Neuer Bemalungsstatus",
+    "editPaintingStatus": "Bemalungsstatus bearbeiten",
+    "deletePaintingStatusTitle": "Bemalungsstatus löschen",
+    "deletePaintingStatusContent": "Möchten Sie den Bemalungsstatus \"{name}\" wirklich löschen?",
+    "statusNameLabel": "Name",
+    "statusColorLabel": "Farbe",
+    "statusOrderLabel": "Reihenfolge"
 }

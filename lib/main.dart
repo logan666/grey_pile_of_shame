@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:grey_pile_of_shame/database/dao/parametric_dao.dart';
 import 'package:grey_pile_of_shame/l10n/app_localizations.dart';
 import 'screens/home/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  final paramDao = ParametricDao();
-  await paramDao.insertDefaultDataIfNeeded();
 
   runApp(MyApp());
 }
@@ -23,7 +19,7 @@ class MyApp extends StatelessWidget {
       home: const HomeScreen(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      locale: const Locale('en'), // idioma por defecto
+      locale: const Locale('es'), // idioma por defecto
     );
   }
 }

@@ -70,5 +70,15 @@
     "integerRequired": "Debe ser un número entero",
     "validPriceRequired": "Debe ser un precio válido",
     "deleteUnitTitle": "Eliminar unidad",
-    "deleteUnitConfirm": "¿Seguro que quieres eliminar \"{name}\"?"
+    "deleteUnitConfirm": "¿Seguro que quieres eliminar \"{name}\"?",
+
+    "paintingStatusSettingsTitle": "Estados de Pintura",
+    "paintingStatusSettingsSubtitle": "Administra los estados de pintura",
+    "newPaintingStatus": "Nuevo Estado de Pintura",
+    "editPaintingStatus": "Editar Estado de Pintura",
+    "deletePaintingStatusTitle": "Eliminar Estado de Pintura",
+    "deletePaintingStatusContent": "¿Seguro que quieres eliminar el estado de pintura \"{name}\"?",
+    "statusNameLabel": "Nombre",
+    "statusColorLabel": "Color",
+    "statusOrderLabel": "Orden"
 }

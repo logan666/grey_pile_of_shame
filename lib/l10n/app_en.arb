@@ -74,5 +74,15 @@
     "integerRequired": "Must be an integer number",
     "validPriceRequired": "Must be a valid price",
     "deleteUnitTitle": "Delete unit",
-    "deleteUnitConfirm": "Are you sure you want to delete \"{name}\"?"
+    "deleteUnitConfirm": "Are you sure you want to delete \"{name}\"?",
+
+    "paintingStatusSettingsTitle": "Painting Statuses",
+    "paintingStatusSettingsSubtitle": "Manage painting statuses",
+    "newPaintingStatus": "New Painting Status",
+    "editPaintingStatus": "Edit Painting Status",
+    "deletePaintingStatusTitle": "Delete Painting Status",
+    "deletePaintingStatusContent": "Are you sure you want to delete the painting status \"{name}\"?",
+    "statusNameLabel": "Name",
+    "statusColorLabel": "Color",
+    "statusOrderLabel": "Order"
 }

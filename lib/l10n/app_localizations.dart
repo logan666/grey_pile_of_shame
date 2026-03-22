@@ -476,6 +476,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to delete \"{name}\"?'**
   String deleteUnitConfirm(Object name);
+
+  /// No description provided for @paintingStatusSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Painting Statuses'**
+  String get paintingStatusSettingsTitle;
+
+  /// No description provided for @paintingStatusSettingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage painting statuses'**
+  String get paintingStatusSettingsSubtitle;
+
+  /// No description provided for @newPaintingStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'New Painting Status'**
+  String get newPaintingStatus;
+
+  /// No description provided for @editPaintingStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Painting Status'**
+  String get editPaintingStatus;
+
+  /// No description provided for @deletePaintingStatusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Painting Status'**
+  String get deletePaintingStatusTitle;
+
+  /// No description provided for @deletePaintingStatusContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the painting status \"{name}\"?'**
+  String deletePaintingStatusContent(Object name);
+
+  /// No description provided for @statusNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get statusNameLabel;
+
+  /// No description provided for @statusColorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get statusColorLabel;
+
+  /// No description provided for @statusOrderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get statusOrderLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

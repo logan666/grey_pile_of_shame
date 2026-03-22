@@ -103,5 +103,15 @@
     {"game": "Age of Sigmar", "name": "Terrain", "icon": "shield"},
     {"game": "Age of Sigmar", "name": "Beast", "icon": "shield"},
     {"game": "Age of Sigmar", "name": "Manifestation", "icon": "shield"}
+  ],
+
+  "painting_statuses": [
+    {"name": "Sin montar", "orden": 0, "color": "#9E9E9E"},
+    {"name": "Montado", "orden": 2, "color": "#2196F3"},
+    {"name": "Imprimado", "orden": 3, "color": "#FF9800"},
+    {"name": "Base", "orden": 4, "color": "#9C27B0"},
+    {"name": "Detalles", "orden": 5, "color": "#FFC107"},
+    {"name": "Table Top", "orden": 6, "color": "#9E9E9E"},
+    {"name": "Terminado", "orden": 999, "color": "#4CAF50"}
   ]
 }

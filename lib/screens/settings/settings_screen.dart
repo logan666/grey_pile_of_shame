@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grey_pile_of_shame/l10n/app_localizations.dart';
 import 'package:grey_pile_of_shame/screens/settings/army_settings.dart';
 import 'package:grey_pile_of_shame/screens/settings/category_settings.dart';
+import 'package:grey_pile_of_shame/screens/settings/painting_status_settings.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -34,6 +35,26 @@ class SettingsScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => CategorySettingsScreen()),
+              );
+            },
+          ),
+
+          const Divider(),
+
+          ListTile(
+            leading: const Icon(Icons.palette),
+            title: Text(
+              AppLocalizations.of(context)!.paintingStatusSettingsTitle,
+            ),
+            subtitle: Text(
+              AppLocalizations.of(context)!.paintingStatusSettingsSubtitle,
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => PaintingStatusSettingsScreen(),
+                ),
               );
             },
           ),

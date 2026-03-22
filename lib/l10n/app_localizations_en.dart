@@ -210,4 +210,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String deleteUnitConfirm(Object name) {
     return 'Are you sure you want to delete \"$name\"?';
   }
+
+  @override
+  String get paintingStatusSettingsTitle => 'Painting Statuses';
+
+  @override
+  String get paintingStatusSettingsSubtitle => 'Manage painting statuses';
+
+  @override
+  String get newPaintingStatus => 'New Painting Status';
+
+  @override
+  String get editPaintingStatus => 'Edit Painting Status';
+
+  @override
+  String get deletePaintingStatusTitle => 'Delete Painting Status';
+
+  @override
+  String deletePaintingStatusContent(Object name) {
+    return 'Are you sure you want to delete the painting status \"$name\"?';
+  }
+
+  @override
+  String get statusNameLabel => 'Name';
+
+  @override
+  String get statusColorLabel => 'Color';
+
+  @override
+  String get statusOrderLabel => 'Order';
 }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:grey_pile_of_shame/database/repository/army_category_repository.dart';
-import 'package:grey_pile_of_shame/database/repository/army_repository.dart';
-import 'package:grey_pile_of_shame/database/repository/parametric_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/unit_repository.dart';
 import 'package:grey_pile_of_shame/l10n/app_localizations.dart';
 import 'package:grey_pile_of_shame/models/army_category.dart';
@@ -22,9 +20,7 @@ class UnitScreen extends StatefulWidget {
 
 class _UnitScreenState extends State<UnitScreen> {
   final unitRepository = UnitRepository();
-  final armyRepository = ArmyRepository();
   final categoryRepository = ArmyCategoryRepository();
-  final parametricRepository = ParametricRepository();
 
   List<Unit> units = [];
 

@@ -72,21 +72,11 @@ class DatabaseHelper {
     ''');
 
     await db.execute('''
-      CREATE TABLE roles (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL,
-          orden INTEGER NOT NULL,
-          code TEXT NOT NULL
-      );
-    ''');
-
-    await db.execute('''
       CREATE TABLE painting_status (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT NOT NULL,
           orden INTEGER NOT NULL,
           color TEXT NOT NULL
-          
       );
     ''');
 
@@ -155,6 +145,16 @@ class DatabaseHelper {
           'icon': cat['icon'],
         });
       }
+    }
+
+    // Insertar estados de pintura
+    final paintingStatuses = data['painting_statuses'] as List<dynamic>? ?? [];
+    for (var status in paintingStatuses) {
+      await db.insert('painting_status', {
+        'name': status['name'],
+        'orden': status['orden'],
+        'color': status['color'],
+      });
     }
   }
 }
