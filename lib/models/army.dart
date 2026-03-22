@@ -4,6 +4,7 @@ class Army {
   final String name;
   final bool visible;
   final String? image;
+  final String? logo;
 
   Army({
     this.id,
@@ -11,6 +12,7 @@ class Army {
     required this.name,
     this.visible = false,
     this.image,
+    this.logo,
   });
 
   Map<String, dynamic> toMap() {
@@ -20,6 +22,7 @@ class Army {
       'name': name,
       'visible': visible ? 1 : 0,
       'image': image,
+      'logo': logo,
     };
   }
 
@@ -30,6 +33,7 @@ class Army {
       name: map['name'] as String,
       visible: (map['visible'] ?? 0) == 1,
       image: map['image'],
+      logo: map['logo'],
     );
   }
 }

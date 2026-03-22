@@ -4,6 +4,7 @@ import 'package:grey_pile_of_shame/database/repository/game_repository.dart';
 import 'package:grey_pile_of_shame/database/repository/unit_repository.dart';
 import 'package:grey_pile_of_shame/screens/settings/settings_screen.dart';
 import 'package:grey_pile_of_shame/screens/list/unit_screen.dart';
+import 'package:grey_pile_of_shame/utils/icon_mapping.dart';
 import 'package:grey_pile_of_shame/utils/progress_bar.dart';
 import '../../models/army.dart';
 import '../../models/game.dart';
@@ -133,21 +134,44 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Row(
                               children: [
-                                const Icon(Icons.shield, size: 18),
+                                // Imagen del ejército desde el mapping
+                                if (armyImageMapping.containsKey(army.name))
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(4),
+                                    child: Image.asset(
+                                      'assets/images/logos/${armyLogoMapping[army.name]}',
+                                      width: 40,
+                                      height: 40,
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                                  )
+                                else
+                                  const SizedBox(
+                                    width: 40,
+                                    height: 40,
+                                  ), // espacio si no hay imagen
+
                                 const SizedBox(width: 8),
-                                Text(army.name),
+
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    army.name,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ),
                               ],
                             ),
 
                             const SizedBox(height: 6),
 
+                            // Barra de progreso
                             Builder(
                               builder: (_) {
                                 final finished =
                                     armyProgress[army.id]?['finished'] ?? 0;
                                 final total =
                                     armyProgress[army.id]?['total'] ?? 0;
-
                                 final progress = total > 0
                                     ? finished / total
                                     : 0.0;
@@ -163,9 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         getProgressColor(progress),
                                       ),
                                     ),
-
                                     const SizedBox(height: 2),
-
                                     Row(
                                       children: [
                                         const Spacer(),

@@ -143,6 +143,7 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
     final nameController = TextEditingController(text: army?.name ?? '');
 
     String? selectedImage = army?.image ?? armyImageMapping.values.first;
+    String? selectedLogo = army?.image ?? armyLogoMapping.values.first;
 
     final result = await showDialog<bool>(
       context: context,
@@ -197,6 +198,40 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
                       });
                     },
                   ),
+
+                  const SizedBox(height: 20),
+
+                  DropdownButtonFormField<String>(
+                    value: selectedLogo,
+
+                    decoration: const InputDecoration(labelText: 'Logo'),
+
+                    items: armyImageMapping.entries.map((entry) {
+                      return DropdownMenuItem(
+                        value: entry.value,
+
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/logos/${entry.value}',
+                              width: 40,
+                              height: 40,
+                            ),
+
+                            const SizedBox(width: 12),
+
+                            Text(entry.key),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+
+                    onChanged: (value) {
+                      setState(() {
+                        selectedLogo = value;
+                      });
+                    },
+                  ),
                 ],
               ),
 
@@ -225,6 +260,7 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
             gameId: gameId,
             visible: true,
             image: selectedImage,
+            logo: selectedLogo,
           ),
         );
 
@@ -234,6 +270,7 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
           gameId: gameId,
           visible: true,
           image: selectedImage,
+          logo: selectedLogo,
         );
 
         setState(() {
@@ -246,6 +283,7 @@ class _ArmiesSettingsPageState extends State<ArmiesSettingsPage> {
           gameId: army.gameId,
           visible: army.visible,
           image: selectedImage,
+          logo: selectedLogo,
         );
 
         await ArmyRepository().updateArmy(updatedArmy);

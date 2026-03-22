@@ -24,3 +24,13 @@ const Map<String, String> armyImageMapping = {
   "Adepta Sororitas": "sisters_of_battle.png",
   "Adeptus Custodes": "custodes.png",
 };
+
+const Map<String, String> armyLogoMapping = {
+  "Space Marines": "space_marines.png",
+  "Chaos Marines": "chaos_marines.png",
+  "Aeldari": "aeldari.png",
+  "Astra Militarum": "astra_militarum.png",
+  "Imperial Knight": "imperial_knight.png",
+  "Adepta Sororitas": "sisters_of_battle.png",
+  "Adeptus Custodes": "custodes.png",
+};

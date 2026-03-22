@@ -17,7 +17,7 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    final path = join(await getDatabasesPath(), 'grey_pile_of_shame5.db');
+    final path = join(await getDatabasesPath(), 'grey_pile_of_shame7.db');
     return await openDatabase(
       path,
       version: 1,
@@ -41,7 +41,8 @@ class DatabaseHelper {
         name TEXT NOT NULL,
         game_id INTEGER NOT NULL,
         visible INTEGER NOT NULL DEFAULT 0,
-        image TEXT
+        image TEXT,
+        logo TEXT
       );
     ''');
 
